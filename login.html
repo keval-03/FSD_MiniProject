@@ -22,6 +22,12 @@
     ></script>
   </head>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Vollkorn:wght@600&display=swap');
+
+    h2 {
+      font-family: "Vollkorn", serif;
+    }
+
     body {
       background-image: linear-gradient(#49e7ca, #36454f);
       background-position: center center;
@@ -38,35 +44,40 @@
     .login_panel {
       background-color: white;
       border-radius: 10px;
-      padding: 0 15px 25px;
-      width: 20%;
+      padding: 15px 25px;
+      width: 30%;
       max-width: 960px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
     .cred_input {
-      margin: auto auto;
+      margin: auto;
       width: 70%;
+      padding: 10px 0;
     }
 
     input {
-      border-radius: 5px;
+      border-style: none;
+      border-bottom: #49e7ca solid 1.5px;
       width: 100%;
       margin-bottom: 20px;
     }
 
-    #signIn {
-      width: 25%;
-      margin-left: 15%;
+    input:focus,
+    textarea:focus {
+      box-shadow: 5px 5px 5px #49e7ca;
+      border: #49e7ca;
     }
-    #signUp {
-      width: 25%;
-      margin-left: 20%;
+    #signIn {
+      width: 100px;
+      margin-right: 50px;
     }
 
-    input[type="text"]:focus,
-    textarea:focus {
-      box-shadow: 0 0 5px #49e7ca;
-      border: solid #49e7ca;
+    #signUp {
+      width: 100px;
+      margin-left: 50px;
     }
   </style>
   <body>
@@ -75,12 +86,14 @@
 
       <div class="cred_input">
         <div><input type="text" placeholder="Full Name" /></div>
-        <div><input type="Password" placeholder="Password" /></div>
+        <div>
+          <input type="Password" placeholder="Password" />
+        </div>
       </div>
 
-      <div class="buttons">
-        <button id="signIn">Sign In</button>
-        <button id="signUp">Sign Up</button>
+      <div class="btn-toolbar pull-left">
+        <button class="btn btn-primary" id="signIn">Sign In</button>
+        <button class="btn btn-secondary" id="signUp">Sign Up</button>
       </div>
     </div>
   </body>
