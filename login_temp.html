@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Log In</title>
+
+    
+  </head>
+  <style>
+    body {
+      background-image: linear-gradient(#49e7ca, #36454f);
+      background-position: center center;
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .login_panel {
+      background-color: white;
+      border-radius: 10px;
+      padding: 0 15px 25px;
+      width: 20%;
+      max-width: 960px;
+    }
+
+    .cred_input{
+      margin: auto auto;
+      width: 70%;
+    }
+
+    input{
+      border-radius: 5px;
+      width: 100%;
+      margin-bottom: 20px;
+    }
+
+    #signIn{
+      width: 25%;
+      margin-left: 15%;
+      
+    }
+    #signUp{
+      width: 25%;
+      margin-left: 20%;
+    }
+
+    input[type=text]:focus, textarea:focus {
+    box-shadow: 0 0 5px #49e7ca;
+    border: solid #49e7ca;
+}
+    
+  </style>
+  <body>
+    <div class="login_panel">
+      <div style="text-align: center;"><h2>Sign In</h2></div>
+
+      <div class="cred_input">
+        <div><input type="text" placeholder="Full Name"></div>
+        <div><input type="Password" placeholder="Password"></div>
+      </div>
+
+      <div class="buttons">
+        <button id = "signIn">Sign In</button>
+        <button id = "signUp">Sign Up</button>
+      </div>
+    </div>
+  </body>
+</html>

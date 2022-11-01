@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Expense Manager</title>
+
+    <link rel="icon" type="image/x-icon" href="/images/logo_icon.ico" />
+  </head>
+  <style>
+    body {
+      background-image: linear-gradient(#49e7ca, #36454f);
+      background-position: center center;
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      height: 100vh;
+      position: relative;
+    }
+
+    img {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+  </style>
+  <body>
+    <img src="/images/logo.png" alt="" />
+
+    <script>
+      // Using ES6 feature.
+      let redirect_Page = () => {
+        let tID = setTimeout(function () {
+          window.location.href = "http://127.0.0.1:5501/login.html";
+          window.clearTimeout(tID); // clear time out.
+        }, 2000);
+      };
+
+      // Using regular methods.
+      /* function redirect_Page () {
+        var tID = setTimeout(function () {
+            window.location.href = "https://www.encodedna.com/javascript/operators/default.htm";
+            window.clearTimeout(tID);		// clear time out.
+        }, 5000);
+    } */
+      document.onreadystatechange = function () {
+        if (document.readyState == "complete") {
+          console.log("ready!");
+          redirect_Page();
+        }
+      };
+    </script>
+  </body>
+</html>
