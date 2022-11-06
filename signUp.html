@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Log In</title>
+
+    <!-- CSS only -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi"
+      crossorigin="anonymous"
+    />
+
+    <!-- JavaScript Bundle with Popper -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Vollkorn:wght@600&display=swap");
+
+    h2 {
+      font-family: "Vollkorn", serif;
+    }
+
+    .errMssg::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: red;
+  opacity: 1; /* Firefox */
+}
+
+    body {
+      background-image: linear-gradient(#49e7ca, #36454f);
+      background-position: center center;
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .login_panel {
+      background-color: white;
+      border-radius: 10px;
+      padding: 15px 25px;
+      width: 30%;
+      max-width: 960px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .cred_input {
+      margin: auto;
+      width: 70%;
+      padding: 10px 0;
+    }
+
+    input {
+      border-style: none;
+      border-bottom: #49e7ca solid 1.5px;
+      width: 100%;
+      margin-bottom: 20px;
+    }
+
+    input:focus,
+    textarea:focus {
+      box-shadow: 5px 5px 5px #49e7ca;
+      border: #49e7ca;
+    }
+    #signUp {
+      width: 100px;
+      margin-right: 50px;
+    }
+
+    #cancel {
+      width: 100px;
+      margin-left: 50px;
+    }
+
+    .errModal {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 40%;
+      display: none;
+      background-color: white;
+      padding: 6rem;
+      border-radius: 5px;
+      box-shadow: 0 3rem 5rem rgba(0, 0, 0, 0.3);
+      z-index: 10;
+    }
+    
+    .err_gif{
+      height: 40px;
+      width: 40px;
+    }
+
+    .close-errModal {
+        position: absolute;
+        top: 40px;
+        right: 32px;
+        font-size: 5rem;
+        color: #333;
+        cursor: pointer;
+        border: none;
+        background: none;
+    }
+
+    .overlay {
+      display: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(3px);
+      z-index: 5;
+}
+
+  </style>
+  <body>
+
+    <div class="errModal">
+      <button class="close-errModal" >&times;</button>
+      
+      <p>
+        <img class="err_gif" src="/images/55-error-solid.gif" alt="">
+        <span class="modal_errMssg"></span>
+      </p>
+    </div>
+    <div class="overlay"></div>
+
+
+    <div class="login_panel" name="signUpPanel">
+      <div style="text-align: center"><h2>Sign Up</h2></div>
+
+      <div class="cred_input">
+        <div><input type="email" placeholder="Email" name="email"/></div>
+        <div>
+          <input type="Password" placeholder="Password" name="password"/>
+        </div>
+      </div>
+
+      <div class="btn-toolbar pull-left" name="credentials">
+        <button class="btn btn-secondary" id="signUp" ">Sign Up</button>
+        <button onclick="location.href = 'http://127.0.0.1:5500/login.html';"class="btn btn-primary" id="cancel">Cancel</button>
+      </div>
+    </div>
+
+
+    <script>
+
+      function closeErrModal(){
+        document.querySelector('.errModal').style.display='none';
+            document.querySelector('.overlay').style.display='none';
+
+      }
+      function showErrModal(){
+        document.querySelector('.errModal').style.display='block';
+        document.querySelector('.overlay').style.display='block';
+
+      }
+      function validate(){
+
+        if( document.querySelector('input[name=email]').value == "" ) {
+            document.querySelector('input[name=email]').placeholder="!Email cannot be empty.";
+            document.querySelector('input[name=email]').classList.add('errMssg');
+            return false;
+         }
+
+        if( document.querySelector('input[name=password]').value == "" ) {
+            document.querySelector('input[name=password]').placeholder="!Password cannot be empty.";
+            document.querySelector('input[name=password]').classList.add('errMssg');
+            return false;
+         }
+
+         var validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+          if(!document.querySelector('input[name=email]').value.match(validRegex)){
+            document.querySelector('.modal_errMssg').innerHTML="Enter a valid Email.";
+            showErrModal();
+            return false;
+          }
+
+         var pw=document.querySelector("input[name=password]").value;
+          if(pw.length<8){
+            document.querySelector(".modal_errMssg").innerHTML="Enter a valid Password.";
+            console.log(pw);
+            showErrModal();
+          return false;
+          }
+
+         return true;
+      }
+      document.getElementById("signUp").onclick = function () {
+        let flag=validate();
+        if(flag){
+          location.href = 'http://127.0.0.1:5500/login.html';
+        }
+    };
+
+    document.querySelector('.close-errModal').addEventListener('click', closeErrModal);
+    document.querySelector('.overlay').addEventListener('click',closeErrModal);
+
+    document.addEventListener('keydown',function(e){
+      if(e.key==='Escape'){
+            closeErrModal();
+      }
+    });
+    </script>
+  </body>
+</html>
