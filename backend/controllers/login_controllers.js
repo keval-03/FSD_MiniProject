@@ -73,4 +73,4 @@ const login_post = (req, res) => {
 
 
 
-module.exports = { login_get, login_post }
+module.exports = { login_post }
