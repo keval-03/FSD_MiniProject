@@ -59,7 +59,7 @@ const login_post = (req, res) => {
                 if (rows.length == 0) res.json({ "msg": "Account does not exists. Please signup" })
 
                 // if the email is correct but the password doesn't matches
-                //else if (await bcrypt.compare(user_password, rows[0].user_password) == false) res.json({ "msg": "Wrong User Credentials!!!!" })
+                else if (await bcrypt.compare(user_password, rows[0].user_password) == false) res.json({ "msg": "Wrong User Credentials!!!!" })
 
                 // if both the email and the password matched then take to home page
                 else res.json({ change_page: 1 , user_id:rows[0].user_id})

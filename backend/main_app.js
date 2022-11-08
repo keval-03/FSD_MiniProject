@@ -2,7 +2,7 @@
 const express = require('express')
 require('dotenv').config();
 const app = express()
-
+const cors  =require('cors')
 
 // PROJECT MODULES
 const connection = require('./db/connection.js')
@@ -11,7 +11,8 @@ const {router} = require('./routes/routes.js')
 
 // MAIN CODE
 app.use(express.json());
-app.use('/api/v1/',router)
+app.use(cors());
+app.use('/api/v1/',router);
 
 
 

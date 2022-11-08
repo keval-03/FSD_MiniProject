@@ -13,7 +13,7 @@
       integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi"
       crossorigin="anonymous"
     />
-
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <!-- JavaScript Bundle with Popper -->
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
@@ -134,7 +134,7 @@
     <div class="errModal">
       <button class="close-errModal" >&times;</button>
       <p>
-        <img class="err_gif" src="/images/55-error-solid.gif" alt="">
+        <img class="err_gif" src="/FSD_MiniProject/images/55-error-solid.gif" alt="">
         <span class="modal_errMssg"></span>
       </p>
     </div>
@@ -151,7 +151,7 @@
       </div>
 
       <div class="btn-toolbar pull-left">
-        <button class="btn btn-primary" id="signIn">Sign In</button>
+        <button class="btn btn-primary" id="signIn" onclick="collect_post()">Sign In</button>
         <button onclick="location.href = 'http://127.0.0.1:5500/signUp.html'"  class="btn btn-secondary" id="signUp" >Sign Up</button>
       </div>
     </div>
@@ -198,12 +198,7 @@
 
          return true;
       }
-      document.getElementById("signIn").onclick = function () {
-        let flag=validate();
-        if(flag){
-          location.href = 'http://127.0.0.1:5500/home.html';
-        }
-    };
+      
 
     document.querySelector('.close-errModal').addEventListener('click', closeErrModal);
     document.querySelector('.overlay').addEventListener('click',closeErrModal);
@@ -213,6 +208,40 @@
             closeErrModal();
       }
     });
+
+    function collect_post()
+    {
+      let flag=validate();
+        if(flag){
+          user_email = document.querySelector('input[name=email]').value ;
+          user_password = document.querySelector('input[name=password]').value;
+
+        json = {"user_email":user_email,"user_password":user_password}
+
+        axios.post('http://localhost:3005/api/v1/login',json)
+          .then(function (response) {
+            console.log(response.data);
+			res = response.data
+			if(res.msg!=undefined)
+			{
+				console.log(res.msg);
+				document.querySelector(".modal_errMssg").innerHTML=res.msg;
+				showErrModal();
+			}
+			else
+			{
+				localStorage.setItem('user_id',res.user_id);
+				location.href = 'http://127.0.0.1:5500/FSD_MiniProject/home.html'
+			}
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+          
+        }
+        
+    }
+
     </script>
   </body>
 </html>
