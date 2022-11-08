@@ -134,7 +134,7 @@
     <div class="errModal">
       <button class="close-errModal" >&times;</button>
       <p>
-        <img class="err_gif" src="/FSD_MiniProject/images/55-error-solid.gif" alt="">
+        <img class="err_gif" src="/images/55-error-solid.gif" alt="">
         <span class="modal_errMssg"></span>
       </p>
     </div>
@@ -231,7 +231,7 @@
 			else
 			{
 				localStorage.setItem('user_id',res.user_id);
-				location.href = 'http://127.0.0.1:5500/FSD_MiniProject/home.html'
+				location.href = 'http://127.0.0.1:5500/home.html/'+res.user_id
 			}
           })
           .catch(function (error) {
