@@ -1,0 +1,91 @@
+											REQUEST RESPONSE STRUCTURES
+
+
+REQUEST FROM LOGIN 
+{
+	"user_email":
+	"user_password":
+}
+
+
+
+
+REQUEST FROM SIGNUP
+{
+	"user_email":
+	"user_password":
+}
+
+
+
+
+
+RESPONSE FOR LOGIN/SIGNUP
+A) if All correct
+{
+	"user_id":
+}
+
+B) if something went wrong
+{
+	"msg":
+}
+
+
+
+
+
+REQUEST FROM HOME
+A) if task is "GET GROUPS"
+{
+	"user_id":
+	"task":
+}
+
+
+B) if task is "MAKE GROUP"
+{
+	"user_id":
+	"task":
+	"group_name":
+	"member_mails":[....]
+}
+
+
+
+
+
+RESPONSE FROM HOME
+A) if task is "GET GROUPS"
+{
+	"mapping":[
+		{
+			"group_id":
+			"group_name":
+			"spent":
+			"paid":
+		},....
+		]
+}
+
+
+
+
+
+B) if task is "MAKE GROUP"
+
+I) if the id corresponding to an emial does not exist
+
+{
+	"msg":
+	"id_list":[...]
+}	
+for an i id id_list[i] == -1 then the id corresponding to that index of member_mails does not exist
+
+II) 
+
+
+
+
+
+

@@ -5,7 +5,7 @@ const app = express()
 const cors  =require('cors')
 
 // PROJECT MODULES
-const connection = require('./db/connection.js')
+const {connection,get_all} = require('./db/connection.js')
 const {router} = require('./routes/routes.js')
 
 
@@ -23,20 +23,8 @@ const start = async ()=>
 {
     try{
             // DATABASE CONNECTION 
-            connection.connect((err)=>
-            {
-                if(err){
-                    console.log(err)
-                }
-                else 
-                {
-                    /*connection.query("SELECT * from MAIN_users",function(err,rows,fields)
-                    {
-                        console.log(rows);
-                    })*/
-                    console.log("Database Connected Successfully!!!!!");
-                }
-            })
+            if(get_all()) console.log("DATABASE CONNECTED!!!")
+            else console.log("SOMETHING WENT WRONG")
         
             // Connecting to PORT
             PORT_NUM = process.env.PORT||3000

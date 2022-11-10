@@ -220,10 +220,11 @@
 					document.querySelector(".modal_errMssg").innerHTML=res.msg;
 					showErrModal();
 				}
-		    	else
-			  	{
+		    else
+			  {
 					localStorage.setItem('user_id',res.user_id);
-					location.href = 'http://127.0.0.1:5500/home.html/'+res.user_id
+          url = 'http://127.0.0.1:5500/home.html';
+					location.href = url
 				}
           	})
           	.catch(function (error) {
