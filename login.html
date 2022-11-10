@@ -132,11 +132,8 @@
     <div class="errModal">
       <button class="close-errModal">&times;</button>
       <p>
-<<<<<<< HEAD
+
         <img class="err_gif" src="/images/55-error-solid.gif" alt="">
-=======
-        <img class="err_gif" src="/images/55-error-solid.gif" alt="" />
->>>>>>> 9a76fd4077474ec38dcf0eaca75f4157a35d29ae
         <span class="modal_errMssg"></span>
       </p>
     </div>
@@ -181,87 +178,10 @@
             "!Email cannot be empty.";
           document.querySelector("input[name=email]").classList.add("errMssg");
           return false;
-<<<<<<< HEAD
+
           }
 
          return true;
-      }
-      
-
-    document.querySelector('.close-errModal').addEventListener('click', closeErrModal);
-    document.querySelector('.overlay').addEventListener('click',closeErrModal);
-
-    document.addEventListener('keydown',function(e){
-      if(e.key==='Escape'){
-            closeErrModal();
-      }
-    });
-
-    function collect_post()
-    {
-      let flag=validate();
-        if(flag){
-          user_email = document.querySelector('input[name=email]').value ;
-          user_password = document.querySelector('input[name=password]').value;
-
-        json = {"user_email":user_email,"user_password":user_password}
-
-        axios.post('http://localhost:3005/api/v1/login',json)
-          .then(function (response) {
-            console.log(response.data);
-			res = response.data
-			if(res.msg!=undefined)
-			{
-				console.log(res.msg);
-				document.querySelector(".modal_errMssg").innerHTML=res.msg;
-				showErrModal();
-			}
-			else
-			{
-				localStorage.setItem('user_id',res.user_id);
-        url = 'http://127.0.0.1:5500/home.html';
-				console.log(url)
-        location.href = url;
-			}
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
-          
-=======
->>>>>>> 9a76fd4077474ec38dcf0eaca75f4157a35d29ae
-        }
-
-        if (document.querySelector("input[name=password]").value == "") {
-          document.querySelector("input[name=password]").placeholder =
-            "!Password cannot be empty.";
-          document
-            .querySelector("input[name=password]")
-            .classList.add("errMssg");
-          return false;
-        }
-
-        var validRegex =
-          /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-        if (
-          !document.querySelector("input[name=email]").value.match(validRegex)
-        ) {
-          document.querySelector(".modal_errMssg").innerHTML =
-            "Enter a valid Email.";
-          showErrModal();
-          return false;
-        }
-
-        var pw = document.querySelector("input[name=password]").value;
-        if (pw.length < 8) {
-          document.querySelector(".modal_errMssg").innerHTML =
-            "Enter a valid Password.";
-          console.log(pw);
-          showErrModal();
-          return false;
-        }
-
-        return true;
       }
 
       document

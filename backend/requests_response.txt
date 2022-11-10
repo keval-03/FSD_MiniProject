@@ -82,7 +82,11 @@ I) if the id corresponding to an emial does not exist
 }	
 for an i id id_list[i] == -1 then the id corresponding to that index of member_mails does not exist
 
-II) 
+II) else if everything is correct
+{
+	"group_id":
+	"group_name":
+}
 
 
 

@@ -5,31 +5,35 @@ const connection = require('../db/connection.js').connection
 const home_post = async (req, res) => {
 
     if (req.body.task === "GET GROUPS") {
-        const { user_id } = req.body.user_id
-        console.log(user_id)
+        const user_id = req.body.user_id
+        //console.log(user_id)
 
         const result = await connection.execute('SELECT group_id FROM MAIN_users__groups WHERE user_id=?', [user_id]);
-        console.log(result[0]);
+        //console.log(result[0]);
 
         ans = {}
         arr = []
 
         for (i = 0; i < result[0].length; i++) {
             const grp_id = result[0][i].group_id;
-            console.log(grp_id)
+            // console.log(grp_id)
 
             const rows = await connection.query("CALL get_grp_id_name(?)", [grp_id])
+
+
+            let table_name = "members_" + grp_id
+            query = "SELECT spent,paid FROM " + table_name + " WHERE user_id=?"
+            const paid_spent = await connection.query(query, [user_id])
+            //console.log(paid_spent[0][0]["paid"])
+            rows[0][0][0]["spent"] = paid_spent[0][0]["spent"]
+            rows[0][0][0]["paid"] = paid_spent[0][0]["paid"]
+
+
             console.log(rows[0][0][0])
-
-            //const table_name = "members_"+grp_id
-            //const paid_spent = await connection.query("SELECT spent,paid FROM ? WHERE user_id=?",[table_name,user_id])
-            //rows[0][0][0]["spent"] = paid_spent[0][0][0]["spent"]
-            //rows[0][0][0]["paid"] = paid_spent[0][0][0]["paid"]
-
             arr.push(rows[0][0][0]);
         }
         ans["mapping"] = arr;
-        console.log(ans);
+        //console.log(ans);
         res.json(ans);
     }
 
@@ -72,7 +76,7 @@ const home_post = async (req, res) => {
             }
         }
         //console.log(ids_array)
-        if (present === false) res.status(400).json({ "msg": "Wrong emails provided!!!", "id_list": ids_array })
+        if (present === false) res.json({ "msg": "Wrong emails provided!!!", "id_list": ids_array })
 
 
         // when all the emails are right then give group entry in MAIN_groups table

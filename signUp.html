@@ -133,11 +133,9 @@
       <button class="close-errModal">&times;</button>
 
       <p>
-<<<<<<< HEAD
+
         <img class="err_gif" src="/images/55-error-solid.gif" alt="">
-=======
-        <img class="err_gif" src="/images/55-error-solid.gif" alt="" />
->>>>>>> 9a76fd4077474ec38dcf0eaca75f4157a35d29ae
+
         <span class="modal_errMssg"></span>
       </p>
     </div>
@@ -222,7 +220,7 @@
 
           json = { user_email: user_email, user_password: user_password };
 
-<<<<<<< HEAD
+
         axios.post('http://localhost:3005/api/v1/signup',json)
           .then(function (response) {
             	console.log(response.data);
@@ -244,25 +242,6 @@
             	console.log(error);
           	});
           
-=======
-          axios
-            .post("http://localhost:3005/api/v1/signup", json)
-            .then(function (response) {
-              console.log(response.data);
-              res = response.data;
-              if (res.msg != undefined) {
-                console.log(res.msg);
-                document.querySelector(".modal_errMssg").innerHTML = res.msg;
-                showErrModal();
-              } else {
-                localStorage.setItem("user_id", res.user_id);
-                location.href = "http://127.0.0.1:5500/home.html";
-              }
-            })
-            .catch(function (error) {
-              console.log(error);
-            });
->>>>>>> 9a76fd4077474ec38dcf0eaca75f4157a35d29ae
         }
       }
 

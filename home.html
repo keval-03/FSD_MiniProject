@@ -21,7 +21,7 @@
       crossorigin="anonymous"
     ></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   </head>
 
   <style>
@@ -93,6 +93,24 @@
     #btnInd{
       position: relative;
     }
+    #grps_list{
+      position:relative;
+      margin:0 20%;
+    }
+    .grps_div{
+      background-color: white;
+      border-radius: 3px;
+      width:100%;
+      height:70px;
+      padding:10px;
+    }
+    .img_span{
+      margin-right:20px;
+      float: left;
+    }
+    .grp_text{
+      font-size:26px;
+    }
 
   </style>
 
@@ -101,9 +119,9 @@
     <div class="addGrpModal hidden" id="addGrpModal" role="dialog">
       <div class="container" style="position: relative;">
             <div class="modalHeader" style= "margin-bottom: 5px; padding: 5px;">
-                <input type="text" placeholder="Add Group Name" style="border: none; border-bottom: #36454f solid thin; width: 60%; font-size: 1.5rem;">
+                <input type="text" id="grp_name" placeholder="Add Group Name" style="border: none; border-bottom: #36454f solid thin; width: 60%; font-size: 1.5rem;">
                     <button type="button" class="btn close" onclick="close_addGrpModal()" style="font-size: 1.5rem;">
-                        <span aria-hidden="true" ">&times;</span>
+                        <span aria-hidden="true" >&times;</span>
                     </button>
             </div>
 
@@ -118,7 +136,7 @@
 
             <div class="modal-footer" style="position: relative;">
               <span>
-                <button class="btn btn-primary submitModal">Submit</button>
+                <button class="btn btn-primary submitModal" onclick="submit_group()">Submit</button>
               </span>
               <span>
                 <button class="btn btn-secondary cancelModal" onclick="close_addGrpModal()">Cancel</button>
@@ -139,8 +157,8 @@
         + ADD GROUP 
         </button>
         </div>
-      <div style="margin-top: 2%" class="grps_div" id="grps_div"></div>
-    </div>
+      <div id = "grps_list">
+      </div>
 
     <script>
         const modal=document.getElementById('addGrpModal');
@@ -150,7 +168,9 @@
         }
 
         function close_addGrpModal(){
-            modal.classList.add('hidden');
+          document.getElementById("grp_name").value="";
+          document.querySelector('.membersList').innerHTML="";
+          modal.classList.add('hidden');
         }
 
 
@@ -163,14 +183,15 @@
           index++;
           const ind =  `div${index}`;
           const memList=document.querySelector('.membersList');
-          const NextMem = `<div class=newMem id="+ind+">
-                            <input type=text class=memInput placeholder=EnterMember>
+          const NextMem = `<div class="newMem" id="`+ind+`">
+                            <input type="text" class="memInput" placeholder="EnterMember" id="i`+index+`">
                             </input>
-                            <button class=btn id="+ind+" onclick=delete_member(this.id)>
+                            <button class="btn" id="d`+index+`" onclick="delete_member(this.id)">
                               <span aria-hidden=true>&times;
                               </span>
                             </button>
                           </div>`;
+          console.log(NextMem);
           // console.log(memList);
           //memList.innerHTML +="<div class=newMem id="+ind+"><input type=text class=memInput placeholder=EnterMember></input><button class=btn id="+ind+" onclick=delete_member(this.id)><span aria-hidden=true>&times;</span></button></div>";
           // memList.innerHTML="";
@@ -178,9 +199,55 @@
         };
 
         function delete_member(id){
-          const div=document.getElementById(id);
-          console.log(div);
+          console.log(id);
+          const div=document.getElementById("div"+id.slice(1));
           div.remove();
+        }
+
+        function submit_group()
+        {
+          
+        	let user_id = localStorage.getItem('user_id');
+        	const group_name = document.getElementById("grp_name").value;
+          
+        	let mails = [];
+        	console.log(index);
+          
+        	for(i = 1; i <= index; i++)
+			{
+            	mails.push(document.getElementById("i"+i).value);
+          	}
+          
+          	console.log(mails);
+
+
+			json = {"user_id": user_id,	"task": "MAKE GROUP" ,"group_name": group_name,"member_mails":mails}
+
+
+			axios.post("http://localhost:3005/api/v1/home", json)
+            .then(function (response) 
+            {
+              	//console.log(response.data);
+				if(response.data.msg===undefined)
+              	{
+					res = response.data;	//json
+					
+
+            		addgrps(res["group_id"],res["group_name"],0)
+			  		close_addGrpModal();
+				}
+				else
+				{
+					error = response.data.msg
+					id_list = response.data.id_list
+					console.log(error)
+				}
+            })
+            .catch(function (error) 
+            {
+              console.log(error);
+            });
+
         }
 
       function make_divs(task) {
@@ -213,20 +280,90 @@
         }
       }
 
-      function addgrps(e){  
+      function getRandomImage(id) {  
+        //declare an array to store the images  
+        var randomImage = new Array();  
+          
+        //insert the URL of images in array  
+        randomImage[0] = "/images/Frame 1.png";  
+        randomImage[1] = "/images/Frame 2.png";  
+        randomImage[2] = "/images/Frame 3.png";  
+        randomImage[3] = "/images/Frame 4.png";  
+        randomImage[4] = "/images/Frame 5.png";  
+        randomImage[5] = "/images/Frame 6.png";  
+          
+        //generate a number and provide to the image to generate randomly  
+        var number = Math.floor(Math.random()*randomImage.length);  
+          
+        //return the images generated by a random number  
+        return document.querySelector("#s"+id).innerHTML = '<img src="'+randomImage[number]+'" />';  
+        }
+
+      function addgrps(id,grp_name,amount){  
           // id,grp_name,amount from server
-          const ind =  `div${grp_id}`;
-          const memList=document.querySelector('.membersList');
-          const NextMem = `<div style="margin-top: 15px" class="grps_div" id="grps_div">
-                            <span class="img_span" id="s1"></span>                            
-                            <p style="line-height: 20px; color: darkturquoise; font-size: 20px;"><strong>Group Name</strong> </p>
-                            <p style="line-height: 10px;"></p>
+          var font_colour;
+          var owe_text;
+          if(amount < 0) {
+            font_colour = "#FF0000";
+            amount = -1*amount;
+            owe_text = "You owe"+amount+".";
+          }
+          else if (amount > 0){
+            font_colour = "#00FF00";
+            owe_text = "You are owed"+amount+".";
+          }
+          else {
+            font_colour = "#36454F";
+            owe_text = "You don't owe anything."
+          }
+          const memList=document.querySelector('#grps_list');
+          const NextMem = `<div style="margin-top: 15px;" class="grps_div" id="`+id+`">
+                            <span class="img_span" id="s`+id+`"></span>                            
+                            <p style="line-height: 20px; color: darkturquoise; font-size: 20px;"><strong>`+grp_name+`</strong> </p>
+                            <p style="line-height: 10px; color:`+font_colour+`">`+owe_text+`</p>
                           </div>`;
           // console.log(memList);
           //memList.innerHTML +="<div class=newMem id="+ind+"><input type=text class=memInput placeholder=EnterMember></input><button class=btn id="+ind+" onclick=delete_member(this.id)><span aria-hidden=true>&times;</span></button></div>";
           // memList.innerHTML="";
-          memList.insertAdjacentHTML('beforeend',NextMem);                 
+          memList.insertAdjacentHTML('beforeend',NextMem);
+          getRandomImage(id);                 
         };
+
+
+        function SEND_FOR_POST()
+        {
+          let user_id = localStorage.getItem('user_id');
+          console.log(user_id)
+
+          json = {"user_id":user_id , "task":"GET GROUPS"}
+
+
+          axios.post("http://localhost:3005/api/v1/home", json)
+            .then(function (response) 
+            {
+              console.log(response.data);
+              res = response.data;
+              res = res["mapping"]
+
+              console.log("res"+res.length)
+              for(i=0;i<res.length;i++)
+              {
+                addgrps(res[i]["group_id"],res[i]["group_name"],res[i]["spent"]-res[i]["paid"])
+              }
+
+            })
+            .catch(function (error) 
+            {
+              console.log(error);
+            });
+
+
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+          SEND_FOR_POST()
+        });
+      
     </script>
   </body>
 </html>

@@ -16,7 +16,7 @@ SELECT * FROM MAIN_users;
 CREATE TABLE MAIN_groups(group_id INTEGER PRIMARY KEY AUTO_INCREMENT, group_name VARCHAR(255));
 
 SELECT * FROM MAIN_groups;
--- DELETE FROM MAIN_groups WHERE group_id=46;
+ DELETE FROM MAIN_groups WHERE group_id=68;
 
 
 -- MAIN_user__groups user_id , group_id
@@ -24,12 +24,11 @@ CREATE TABLE MAIN_users__groups
 (
 user_id INTEGER , group_id INTEGER,
 FOREIGN KEY (user_id) REFERENCES MAIN_users(user_id), 
-FOREIGN KEY (group_id) REFERENCES MAIN_groups(group_id),
-CONSTRAINT enrolled_pkey PRIMARY KEY (user_id, group_id)
+FOREIGN KEY (group_id) REFERENCES MAIN_groups(group_id)
  );
 
  SELECT * FROM MAIN_users__groups;
--- DELETE FROM MAIN_users__groups WHERE user_id=2 AND group_id=20;
+ DELETE FROM MAIN_users__groups WHERE group_id=64;
 -- DROP TABLE MAIN_users__groups 
  
 -- INSERT INTO MAIN_groups (group_name) VALUES ("GROUP 2") ;
@@ -69,5 +68,11 @@ DELIMITER //
 
  -- CALL insert_user_id_group_id(1,1);
  
--- DROP TABLE members_48;
+DROP TABLE buttons_64;
+DROP TABLE activities_64;
+DROP TABLE announcements_64;
+DROP TABLE logs_64;
+DROP TABLE members_64;
+
 show tables;
+SELECT * FROM members_60;
