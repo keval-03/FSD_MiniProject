@@ -110,7 +110,7 @@
             <div class="modal_Body" style="padding: 5px; position: relative; margin-top: 10px;">
               <div class="modalHeading">
                 <h5 style="color: black;">Members</h5>
-                <button class="btn btn-primary" id="add_mem" type = "button" onclick="addMem(event)" >ADD MEMBERS</button>
+                <button class="btn btn-primary" id="add_mem" type = "button" onclick="addMem()" >ADD MEMBERS</button>
               </div>
                 <div class="membersList">
                 </div>
@@ -128,7 +128,7 @@
     </div>
 
     <div class="jumbotron">
-      <img src="/FSD_MiniProject/images/home_banner.png" alt="" width="100%" height="180px" />
+      <img src="/images/home_banner.png" alt="" width="100%" height="180px" />
     </div>
 
     <div class="container">
@@ -155,14 +155,26 @@
 
 
         let index=0;
-        function addMem(e){
-          e.preventDefault();
+        /*
+          To add divs to add members in the add group button modal
+        */
+        function addMem(){
+          // e.preventDefault();
           index++;
           const ind =  `div${index}`;
           const memList=document.querySelector('.membersList');
+          const NextMem = `<div class=newMem id="+ind+">
+                            <input type=text class=memInput placeholder=EnterMember>
+                            </input>
+                            <button class=btn id="+ind+" onclick=delete_member(this.id)>
+                              <span aria-hidden=true>&times;
+                              </span>
+                            </button>
+                          </div>`;
           // console.log(memList);
-          memList.innerHTML +="<div class=newMem id="+ind+"><input type=text class=memInput placeholder=EnterMember></input><button class=btn id="+ind+" onclick=delete_member(this.id)><span aria-hidden=true>&times;</span></button></div>";
-          // memList.innerHTML="";                 
+          //memList.innerHTML +="<div class=newMem id="+ind+"><input type=text class=memInput placeholder=EnterMember></input><button class=btn id="+ind+" onclick=delete_member(this.id)><span aria-hidden=true>&times;</span></button></div>";
+          // memList.innerHTML="";
+          memList.insertAdjacentHTML('beforeend',NextMem);                 
         };
 
         function delete_member(id){
@@ -200,6 +212,21 @@
           div.style.backgroundColor = "#ADFF2F";
         }
       }
+
+      function addgrps(e){  
+          // id,grp_name,amount from server
+          const ind =  `div${grp_id}`;
+          const memList=document.querySelector('.membersList');
+          const NextMem = `<div style="margin-top: 15px" class="grps_div" id="grps_div">
+                            <span class="img_span" id="s1"></span>                            
+                            <p style="line-height: 20px; color: darkturquoise; font-size: 20px;"><strong>Group Name</strong> </p>
+                            <p style="line-height: 10px;"></p>
+                          </div>`;
+          // console.log(memList);
+          //memList.innerHTML +="<div class=newMem id="+ind+"><input type=text class=memInput placeholder=EnterMember></input><button class=btn id="+ind+" onclick=delete_member(this.id)><span aria-hidden=true>&times;</span></button></div>";
+          // memList.innerHTML="";
+          memList.insertAdjacentHTML('beforeend',NextMem);                 
+        };
     </script>
   </body>
 </html>
