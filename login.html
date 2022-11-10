@@ -22,16 +22,17 @@
     ></script>
   </head>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Vollkorn:wght@600&display=swap');
+    @import url("https://fonts.googleapis.com/css2?family=Vollkorn:wght@600&display=swap");
 
     h2 {
       font-family: "Vollkorn", serif;
     }
 
-    .errMssg::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
-  color: red;
-  opacity: 1; /* Firefox */
-}
+    .errMssg::placeholder {
+      /* Chrome, Firefox, Opera, Safari 10.1+ */
+      color: red;
+      opacity: 1; /* Firefox */
+    }
 
     body {
       background-image: linear-gradient(#49e7ca, #36454f);
@@ -98,21 +99,21 @@
       box-shadow: 0 3rem 5rem rgba(0, 0, 0, 0.3);
       z-index: 10;
     }
-    
-    .err_gif{
+
+    .err_gif {
       height: 40px;
       width: 40px;
     }
 
     .close-errModal {
-        position: absolute;
-        top: 40px;
-        right: 32px;
-        font-size: 5rem;
-        color: #333;
-        cursor: pointer;
-        border: none;
-        background: none;
+      position: absolute;
+      top: 40px;
+      right: 32px;
+      font-size: 5rem;
+      color: #333;
+      cursor: pointer;
+      border: none;
+      background: none;
     }
 
     .overlay {
@@ -126,15 +127,16 @@
       backdrop-filter: blur(3px);
       z-index: 5;
     }
-
-
   </style>
   <body>
-
     <div class="errModal">
-      <button class="close-errModal" >&times;</button>
+      <button class="close-errModal">&times;</button>
       <p>
+<<<<<<< HEAD
         <img class="err_gif" src="/images/55-error-solid.gif" alt="">
+=======
+        <img class="err_gif" src="/images/55-error-solid.gif" alt="" />
+>>>>>>> 9a76fd4077474ec38dcf0eaca75f4157a35d29ae
         <span class="modal_errMssg"></span>
       </p>
     </div>
@@ -146,54 +148,40 @@
       <div class="cred_input">
         <div><input type="email" placeholder="Email" name="email" /></div>
         <div>
-          <input type="Password" placeholder="Password" name="password"/>
+          <input type="Password" placeholder="Password" name="password" />
         </div>
       </div>
 
       <div class="btn-toolbar pull-left">
-        <button class="btn btn-primary" id="signIn" onclick="collect_post()">Sign In</button>
-        <button onclick="location.href = 'http://127.0.0.1:5500/signUp.html'"  class="btn btn-secondary" id="signUp" >Sign Up</button>
+        <button class="btn btn-primary" id="signIn" onclick="collect_post()">
+          Sign In
+        </button>
+        <button
+          onclick="location.href = 'http://127.0.0.1:5500/signUp.html'"
+          class="btn btn-secondary"
+          id="signUp"
+        >
+          Sign Up
+        </button>
       </div>
     </div>
 
     <script>
-      function closeErrModal(){
-        document.querySelector('.errModal').style.display='none';
-            document.querySelector('.overlay').style.display='none';
-
+      function closeErrModal() {
+        document.querySelector(".errModal").style.display = "none";
+        document.querySelector(".overlay").style.display = "none";
       }
-      function showErrModal(){
-        document.querySelector('.errModal').style.display='block';
-        document.querySelector('.overlay').style.display='block';
-
+      function showErrModal() {
+        document.querySelector(".errModal").style.display = "block";
+        document.querySelector(".overlay").style.display = "block";
       }
-      function validate(){
-
-        if( document.querySelector('input[name=email]').value == "" ) {
-            document.querySelector('input[name=email]').placeholder="!Email cannot be empty.";
-            document.querySelector('input[name=email]').classList.add('errMssg');
-            return false;
-         }
-
-        if( document.querySelector('input[name=password]').value == "" ) {
-            document.querySelector('input[name=password]').placeholder="!Password cannot be empty.";
-            document.querySelector('input[name=password]').classList.add('errMssg');
-            return false;
-         }
-
-         var validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-          if(!document.querySelector('input[name=email]').value.match(validRegex)){
-            document.querySelector('.modal_errMssg').innerHTML="Enter a valid Email.";
-            showErrModal();
-            return false;
-          }
-
-         var pw=document.querySelector("input[name=password]").value;
-          if(pw.length<8){
-            document.querySelector(".modal_errMssg").innerHTML="Enter a valid Password.";
-            console.log(pw);
-            showErrModal();
+      function validate() {
+        if (document.querySelector("input[name=email]").value == "") {
+          document.querySelector("input[name=email]").placeholder =
+            "!Email cannot be empty.";
+          document.querySelector("input[name=email]").classList.add("errMssg");
           return false;
+<<<<<<< HEAD
           }
 
          return true;
@@ -240,10 +228,82 @@
             console.log(error);
           });
           
+=======
+>>>>>>> 9a76fd4077474ec38dcf0eaca75f4157a35d29ae
         }
-        
-    }
 
+        if (document.querySelector("input[name=password]").value == "") {
+          document.querySelector("input[name=password]").placeholder =
+            "!Password cannot be empty.";
+          document
+            .querySelector("input[name=password]")
+            .classList.add("errMssg");
+          return false;
+        }
+
+        var validRegex =
+          /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+        if (
+          !document.querySelector("input[name=email]").value.match(validRegex)
+        ) {
+          document.querySelector(".modal_errMssg").innerHTML =
+            "Enter a valid Email.";
+          showErrModal();
+          return false;
+        }
+
+        var pw = document.querySelector("input[name=password]").value;
+        if (pw.length < 8) {
+          document.querySelector(".modal_errMssg").innerHTML =
+            "Enter a valid Password.";
+          console.log(pw);
+          showErrModal();
+          return false;
+        }
+
+        return true;
+      }
+
+      document
+        .querySelector(".close-errModal")
+        .addEventListener("click", closeErrModal);
+      document
+        .querySelector(".overlay")
+        .addEventListener("click", closeErrModal);
+
+      document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape") {
+          closeErrModal();
+        }
+      });
+
+      function collect_post() {
+        let flag = validate();
+        if (flag) {
+          user_email = document.querySelector("input[name=email]").value;
+          user_password = document.querySelector("input[name=password]").value;
+
+          json = { user_email: user_email, user_password: user_password };
+
+          axios
+            .post("http://localhost:3005/api/v1/login", json)
+            .then(function (response) {
+              console.log(response.data);
+              res = response.data;
+              if (res.msg != undefined) {
+                console.log(res.msg);
+                document.querySelector(".modal_errMssg").innerHTML = res.msg;
+                showErrModal();
+              } else {
+                localStorage.setItem("user_id", res.user_id);
+                location.href = "http://127.0.0.1:5500/home.html";
+              }
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
+        }
+      }
     </script>
   </body>
 </html>
