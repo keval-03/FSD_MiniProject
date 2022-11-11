@@ -11,6 +11,10 @@ const home_post = async (req, res) => {
         const result = await connection.execute('SELECT group_id FROM MAIN_users__groups WHERE user_id=?', [user_id]);
         //console.log(result[0]);
 
+        let user_email = await connection.execute("SELECT user_email from MAIN_users WHERE user_id=?", [user_id])
+        user_email = user_email[0][0]["user_email"];
+
+
         ans = {}
         arr = []
 
@@ -33,6 +37,7 @@ const home_post = async (req, res) => {
             arr.push(rows[0][0][0]);
         }
         ans["mapping"] = arr;
+        ans["user_email"] = user_email
         //console.log(ans);
         res.json(ans);
     }
@@ -76,16 +81,19 @@ const home_post = async (req, res) => {
             }
         }
         //console.log(ids_array)
-        if (present === false) res.json({ "msg": "Wrong emails provided!!!", "id_list": ids_array })
-
+        if (present === false) {
+            res.json({ "msg": "Wrong emails provided!!!", "id_list": ids_array })
+            return;
+        }
 
         // when all the emails are right then give group entry in MAIN_groups table
-        let [rows, cols] = await connection.execute("INSERT INTO MAIN_groups (group_name) VALUES (?)", [group_name])
-        console.log("ID OF GROUP INSERTED IS: ", rows["insertId"])
+        //let [rows, cols] = await connection.execute("INSERT INTO MAIN_groups (group_name) VALUES (?)", [group_name])
+        //console.log("ID OF GROUP INSERTED IS: ", rows["insertId"])
         right_json["group_id"] = rows["insertId"]
 
 
         // then do the mapping of user_id and group_id in MAIN_users__groups table
+        ids_array.push(user_id)
         for (i = 0; i < ids_array.length; i++) {
             [rows, cols] = await connection.execute("CALL insert_user_id_group_id(?,?)", [ids_array[i], right_json["group_id"]])
         }
@@ -116,7 +124,7 @@ const home_post = async (req, res) => {
 
         // activities_[group_id] table --> activity_id, activity_name , A_pay , A_spent ..... 
         table_name = "activities_" + String(right_json["group_id"])
-        q = "CREATE TABLE " + table_name + " (activity_id INTEGER PRIMARY KEY AUTO_INCREMENT, activity_name VARCHAR(255), activity_time DATETIME"
+        q = "CREATE TABLE " + table_name + " (activity_id INTEGER PRIMARY KEY AUTO_INCREMENT, activity_name VARCHAR(255), activity_time VARCHAR(2048)"
 
         for (i = 0; i < ids_array.length; i++) {
             q = q + ', ' + String(ids_array[i]) + "_pay" + ' INTEGER, ' + String(ids_array[i]) + "_spent" + ' INTEGER'
@@ -131,15 +139,43 @@ const home_post = async (req, res) => {
         // announcements_[group_id] table --> by_id , announcement , dtime
         table_name = "announcements_" + String(right_json["group_id"])
         table_name_2 = "members_" + String(right_json["group_id"])
-        query = "CREATE TABLE " + table_name + " ( by_id INTEGER ,announcement VARCHAR(3000) , dtime DATETIME, FOREIGN KEY (by_id) references " + table_name_2 + "(user_id) )"
+        query = "CREATE TABLE " + table_name + " ( by_id INTEGER ,announcement VARCHAR(3000) , dtime VARCHAR(2048), FOREIGN KEY (by_id) references " + table_name_2 + "(user_id) )"
         result = await connection.execute(query);
 
 
         // logs_[group_id] table  --> by_id , for_id , logs , dtime
         //console.log("logs_"+String(right_json["group_id"]))
         table_name = "logs_" + String(right_json["group_id"])
-        query = "CREATE TABLE " + table_name + " ( by_id INTEGER , for_id INTEGER ,  logs VARCHAR(3000) , dtime DATETIME, FOREIGN KEY (by_id) references " + table_name_2 + "(user_id) , FOREIGN KEY (for_id) references " + table_name_2 + "(user_id) )"
+        query = "CREATE TABLE " + table_name + " ( by_id INTEGER , for_id INTEGER DEFAULT NULL,  logs VARCHAR(3000) , dtime VARCHAR(2048), FOREIGN KEY (by_id) references " + table_name_2 + "(user_id) , FOREIGN KEY (for_id) references " + table_name_2 + "(user_id) )"
         result = await connection.execute(query)
+
+
+        // INSERTING VALUES IN LOGS
+        let user_email = await connection.execute("SELECT user_email from MAIN_users WHERE user_id=?", [user_id])
+        let dt = await connection.execute("SELECT NOW()");
+        dt = dt[0][0]["NOW()"]
+
+
+        console.log(user_id, group_name, user_id, dt)
+
+        user_email = user_email[0][0]["user_email"];
+        created = `"GROUP HELLO WORLD CREATED BY ${user_email}"`
+        query = `INSERT INTO ${table_name} VALUES (${user_id},NULL,${created},'${dt}')`
+
+        result = await connection.execute(query)
+        //console.log(result)
+
+        for (i = 0; i < ids_array.length - 1; i++) {
+            let user_email = await connection.execute("SELECT user_email from MAIN_users WHERE user_id=?", [ids_array[i]])
+            let dt = await connection.execute("SELECT NOW()");
+            dt = dt[0][0]["NOW()"]
+            user_email = user_email[0][0]["user_email"];
+
+            created = `"${user_email} is added to the group"`
+            query = `INSERT INTO ${table_name} VALUES (${ids_array[i]},NULL,${created},'${dt}')`
+            result = await connection.execute(query)
+        }
+
 
         right_json["group_name"] = group_name;
         res.json(right_json)

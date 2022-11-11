@@ -2,7 +2,7 @@ const sql = require('mysql2');
 require('dotenv').config();
 
 
-const connection =  sql.createPool({
+const connection = sql.createPool({
     host: process.env.DB_HOST,
     user: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,
@@ -10,12 +10,16 @@ const connection =  sql.createPool({
 }).promise()
 
 
-const get_all = async ()=>
-{
-    const [rows,cols] = await connection.query("SELECT * FROM MAIN_users LIMIT 1")
-    //console.log(rows.length);
-    if(rows.length>0!=undefined) return true;
-    else return false;
+const get_all = async () => {
+    try {
+        const [rows, cols] = await connection.execute("SELECT * FROM MAIN_users LIMIT 1")
+        if (rows != undefiend)
+            return true;
+        else return false;
+    }
+    catch (err) {
+        return false;
+    }
 }
 
-module.exports = {connection,get_all}
+module.exports = { connection, get_all }
