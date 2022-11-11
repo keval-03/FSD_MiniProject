@@ -92,9 +92,6 @@
       border-bottom: black ridge thin;
     }
 
-    #btnInd{
-      position: relative;
-    }
     #grps_list{
       position:relative;
       margin:0 20%;
@@ -203,6 +200,7 @@
         </div>
       <div id = "grps_list">
       </div>
+    </div>
 
     <script>
         const modal=document.getElementById('addGrpModal');
@@ -264,6 +262,12 @@
                     
         	let user_id = localStorage.getItem('user_id');
         	const group_name = document.getElementById("grp_name").value;
+
+          if(group_name === ""){
+            document.querySelector(".modal_errMssg").innerHTML = "Group Name cannot be empty.";
+              showErrModal();
+              return;
+          }
           
         	let mails = [];
         	console.log(index);
