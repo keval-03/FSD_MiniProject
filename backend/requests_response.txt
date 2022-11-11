@@ -111,25 +111,27 @@ I) if task is "GET ACTIVITIES"
 
 II) if the task is "NEW ACTIVITY"
 {
+	"user_id":
+	"group_id":
 	"activity_name":
-	
-	"mapping":{	
-	"email_1":[pay,spent],
-	"email_2":[pay,spent]
-	}
+	"task":
+	"mapping":[	
+	{"email":, "pay":, "spent": },
+	{"email":, "pay":, "spent": }
+	]
 }
 
 ============================================================
 
 RESPONSE FROM HOME
 
-A) if task is "GET GROUPS"
+A) if task is "GET ACTIVITIES"
 {
 	"mapping":[
 		{
 			"activity_id":
 			"activity_name":
-			"date":				
+			"activity_time":				
 			"spent":
 			"paid":
 		},....
@@ -139,4 +141,13 @@ A) if task is "GET GROUPS"
 
 
 B) if task is "NEW ACTIVITY" 
+{
 
+	"mapping":{
+			"activity_id":
+			"activity_name":
+			"date":				
+			"spent":
+			"paid":
+	}
+}
