@@ -1,4 +1,4 @@
-const connection = require('../db/connection.js')
+const connection = require('../db/connection.js').connection
 const express = require('express')
 const mysql = require('mysql2')
 const bcrypt = require('bcrypt')
@@ -17,38 +17,31 @@ const bcrypt = require('bcrypt')
 }*/
 
 
-const signup_post = (req,res)=>
+const signup_post = async (req,res)=>
 {
     let {user_email,user_password} = req.body;
-    connection.query("SELECT * FROM MAIN_users WHERE user_email="+mysql.escape(user_email),async function (err, rows, fields) {
-        if (err) console.log(err);
 
-        else {
-           console.log(req.body)
-           
-           if(rows.length==0)
-           {
-                const salt = await bcrypt.genSalt();
-                user_password = await bcrypt.hash(user_password,salt);
-                console.log(user_password)
-                connection.query("INSERT INTO MAIN_users (user_email,user_password) VALUES ("+ mysql.escape(user_email) + ","+ mysql.escape(user_password) +")", function (err, rows, fields) {
-                    if (err) console.log(err);
+    const [rows,cols] = await connection.query("SELECT * FROM MAIN_users WHERE user_email=?" ,[user_email] )
+    console.log(rows)
+       
+    if(rows.length==0)
+    {
+        const salt = await bcrypt.genSalt();
+        user_password = await bcrypt.hash(user_password,salt);
+        //console.log(user_password)
 
-                    else 
-                    {
-                        console.log(rows)
-                        res.json({"user_id":rows.insertId})
-                    }
-                })
-                
-           }
+        const [rows,cols] = await connection.query("INSERT INTO MAIN_users (user_email,user_password) VALUES (?,?)",[user_email,user_password] )
+        //console.log(rows)
+        //console.log(rows.insertId)
+        res.json({"user_id":rows.insertId})          
+    }
 
-           else
-           {
-            res.json({"msg":"Account already exists!!!"})
-           }
-        }
-    })
+    else
+    {
+        res.json({"msg":"Account already exists!!!"})
+    }
+
 }
+
 
 module.exports = {signup_post}
