@@ -81,10 +81,8 @@ const home_post = async (req, res) => {
             }
         }
         //console.log(ids_array)
-        if (present === false) {
-            res.json({ "msg": "Wrong emails provided!!!", "id_list": ids_array })
-            return;
-        }
+        if (present === false) res.json({ "msg": "Wrong emails provided!!!", "id_list": ids_array })
+
 
         // when all the emails are right then give group entry in MAIN_groups table
         //let [rows, cols] = await connection.execute("INSERT INTO MAIN_groups (group_name) VALUES (?)", [group_name])
