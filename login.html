@@ -191,47 +191,9 @@
         .querySelector(".overlay")
         .addEventListener("click", closeErrModal);
 
-<<<<<<< HEAD
-    document.addEventListener('keydown',function(e){
-      if(e.key==='Escape'){
-            closeErrModal();
-      }
-    });
-
-    function collect_post()
-    {
-      let flag=validate();
-        if(flag){
-          user_email = document.querySelector('input[name=email]').value ;
-          user_password = document.querySelector('input[name=password]').value;
-
-        json = {"user_email":user_email,"user_password":user_password}
-
-        axios.post('http://localhost:3005/api/v1/login',json)
-          .then(function (response) {
-            console.log(response.data);
-			res = response.data
-			if(res.msg!=undefined)
-			{
-				console.log(res.msg);
-				document.querySelector(".modal_errMssg").innerHTML=res.msg;
-				showErrModal();
-			}
-			else
-			{
-				localStorage.setItem('user_id',res.user_id);
-				location.href = 'http://127.0.0.1:5500/home.html'
-			}
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
-          
-=======
       document.addEventListener("keydown", function (e) {
         if (e.key === "Escape") {
           closeErrModal();
->>>>>>> 7137ff2fd4602d882f13264ff0cecc230a0f9b67
         }
       });
 
