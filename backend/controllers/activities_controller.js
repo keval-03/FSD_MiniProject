@@ -31,7 +31,7 @@ const activities_post = async (req, res) => {
       js["activity_id"] = result[0][i]["activity_id"];
       js["activity_name"] = result[0][i]["activity_name"];
       js["activity_time"] = result[0][i]["activity_time"];
-      js["pay"] = result[0][i][String(user_id) + "_pay"];
+      js["paid"] = result[0][i][String(user_id) + "_pay"];
       js["spent"] = result[0][i][String(user_id) + "_spent"];
       mapping.push(js);
     }
@@ -113,8 +113,9 @@ const activities_post = async (req, res) => {
     result = await connection.execute(query);
     let inserted_id = result[0]["insertId"];
 
-    let date = await connection.execute("SELECT NOW()");
-    date = date[0][0]["NOW()"];
+    let date = await connection.execute(`SELECT activity_time FROM ${table_name}`);
+    date = date[0][0]["activity_time"];
+    console.log(date)
 
     ans["activity_id"] = inserted_id;
     ans["activity_time"] = date;
@@ -152,7 +153,7 @@ async function gen_query_insert(
 
   let date = await connection.execute("SELECT NOW()");
   date = date[0][0]["NOW()"];
-  //console.log(date)
+  console.log("date",date)
 
   query = query + `) VALUES ("${activity_name}" , '${date}' `;
 
