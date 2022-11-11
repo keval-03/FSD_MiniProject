@@ -1,6 +1,6 @@
 											REQUEST RESPONSE STRUCTURES
 
-
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 REQUEST FROM LOGIN 
 {
 	"user_email":
@@ -8,7 +8,7 @@ REQUEST FROM LOGIN
 }
 
 
-
+===============================================
 
 REQUEST FROM SIGNUP
 {
@@ -16,7 +16,7 @@ REQUEST FROM SIGNUP
 	"user_password":
 }
 
-
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
 
@@ -26,13 +26,14 @@ A) if All correct
 	"user_id":
 }
 
+==============================================
+
 B) if something went wrong
 {
 	"msg":
 }
 
-
-
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
 REQUEST FROM HOME
@@ -42,6 +43,7 @@ A) if task is "GET GROUPS"
 	"task":
 }
 
+==============================================
 
 B) if task is "MAKE GROUP"
 {
@@ -53,7 +55,7 @@ B) if task is "MAKE GROUP"
 
 
 
-
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 RESPONSE FROM HOME
 A) if task is "GET GROUPS"
@@ -66,11 +68,12 @@ A) if task is "GET GROUPS"
 			"paid":
 		},....
 		]
+	"user_email":
 }
 
 
 
-
+==========================================================================================================
 
 B) if task is "MAKE GROUP"
 
@@ -82,14 +85,58 @@ I) if the id corresponding to an emial does not exist
 }	
 for an i id id_list[i] == -1 then the id corresponding to that index of member_mails does not exist
 
+_______________________________________________________________________________________________
+
 II) else if everything is correct
 {
 	"group_id":
 	"group_name":
 }
 
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
 
+A) REQUEST FROM ACTIVITIES
 
+I) if task is "GET ACTIVITIES"
+
+{
+	"user_id":
+	"group_id":
+	"task":
+}
+
+
+
+II) if the task is "NEW ACTIVITY"
+{
+	"activity_name":
+	
+	"mapping":{	
+	"email_1":[pay,spent],
+	"email_2":[pay,spent]
+	}
+}
+
+============================================================
+
+RESPONSE FROM HOME
+
+A) if task is "GET GROUPS"
+{
+	"mapping":[
+		{
+			"activity_id":
+			"activity_name":
+			"date":				
+			"spent":
+			"paid":
+		},....
+		]
+	"member_names":[.....]
+}
+
+
+B) if task is "NEW ACTIVITY" 
 

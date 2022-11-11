@@ -7,7 +7,7 @@
     <title>Home</title>
 
     <link rel="icon" type="image/x-icon" href="/images/logo_icon.ico" />
-    
+
     <!-- CSS only -->
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"
@@ -98,6 +98,11 @@
     #grps_list{
       position:relative;
       margin:0 20%;
+      margin-bottom: 50px;
+    }
+    .grps_div:hover{
+      cursor: pointer;
+      box-shadow: 10px 5px 10px #49e7ca;
     }
     .grps_div{
       background-color: white;
@@ -113,11 +118,48 @@
     .grp_text{
       font-size:26px;
     }
+    .errModal {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 40%;
+      display: none;
+      background-color: white;
+      padding: 6rem;
+      border-radius: 5px;
+      box-shadow: 0 3rem 5rem rgba(0, 0, 0, 0.3);
+      z-index: 50;
+    }
+
+    .err_gif {
+      height: 40px;
+      width: 40px;
+    }
+
+    .close-errModal {
+      position: absolute;
+      top: 40px;
+      right: 32px;
+      font-size: 5rem;
+      color: #333;
+      cursor: pointer;
+      border: none;
+      background: none;
+    }
 
   </style>
 
   <body>
+    <div class="errModal">
+      <button class="close-errModal">&times;</button>
+      <p>
 
+        <img class="err_gif" src="/images/55-error-solid.gif" alt="">
+        <span class="modal_errMssg"></span>
+      </p>
+    </div>
+    <div class="overlay"></div>
     <div class="addGrpModal hidden" id="addGrpModal" role="dialog">
       <div class="container" style="position: relative;">
             <div class="modalHeader" style= "margin-bottom: 5px; padding: 5px;">
@@ -138,7 +180,7 @@
 
             <div class="modal-footer" style="position: relative;">
               <span>
-                <button class="btn btn-primary submitModal" onclick="submit_group()">Submit</button>
+                <button class="btn btn-primary submitModal" id = "submit_group_button"onclick="submit_group()">Submit</button>
               </span>
               <span>
                 <button class="btn btn-secondary cancelModal" onclick="close_addGrpModal()">Cancel</button>
@@ -175,6 +217,17 @@
           modal.classList.add('hidden');
         }
 
+        function closeErrModal() {
+          document.querySelector(".errModal").style.display = "none";
+          document.querySelector(".overlay").style.display = "none";
+        }
+        function showErrModal() {
+          document.querySelector(".errModal").style.display = "block";
+          document.querySelector(".overlay").style.display = "block";
+        }
+        document
+        .querySelector(".close-errModal")
+        .addEventListener("click", closeErrModal);
 
         let index=0;
         /*
@@ -208,19 +261,44 @@
 
         function submit_group()
         {
-          
+                    
         	let user_id = localStorage.getItem('user_id');
         	const group_name = document.getElementById("grp_name").value;
           
         	let mails = [];
         	console.log(index);
           
+          let flag = 0;
+          let ind = 0;
         	for(i = 1; i <= index; i++)
 			      {
-            	mails.push(document.getElementById("i"+i).value);
+              if(document.getElementById("i"+i)===null){ 
+                continue;
+              }
+              else{
+                ind++;
+                mails.push(document.getElementById("i"+i).value);
+                if (mails[i-1]==""){
+                  flag = 1;
+                  break;
+                }
+              }
           	}
-          
+            if(flag === 1) {
+              document.querySelector(".modal_errMssg").innerHTML = "Member Name cannot be empty.";
+              showErrModal();
+              return;
+            }
           	console.log(mails);
+            for(i = 0; i < ind-1; i++){
+              for(j = i+1; j <= ind-1; j++){
+                if(mails[i]===mails[j]){
+                  document.querySelector(".modal_errMssg").innerHTML = "Email cannot be repeated.";
+                  showErrModal();
+                  return;
+                }
+              }
+            }
 
 
 			json = {"user_id": user_id,	"task": "MAKE GROUP" ,"group_name": group_name,"member_mails":mails}
@@ -242,14 +320,15 @@
 				{
 					error = response.data.msg
 					id_list = response.data.id_list
-					console.log(error)
+          document.querySelector(".modal_errMssg").innerHTML = error;
+          showErrModal();
 				}
             })
             .catch(function (error) 
             {
               console.log(error);
             });
-
+            index = 0;
         }
 
       function make_divs(task) {
@@ -319,7 +398,7 @@
             owe_text = "You don't owe anything."
           }
           const memList=document.querySelector('#grps_list');
-          const NextMem = `<div style="margin-top: 15px;" class="grps_div" id="`+id+`">
+          const NextMem = `<div style="margin-top: 15px;" class="grps_div" id="`+id+`" onclick="groups_on_click(this.id)">
                             <span class="img_span" id="s`+id+`"></span>                            
                             <p style="line-height: 20px; color: darkturquoise; font-size: 20px;"><strong>`+grp_name+`</strong> </p>
                             <p style="line-height: 10px; color:`+font_colour+`">`+owe_text+`</p>
@@ -331,6 +410,11 @@
           getRandomImage(id);                 
         };
 
+        // To navigate to groups.html when clicked on a group
+        function groups_on_click(id){
+          localStorage.setItem("group_id",id);
+          window.location.href = "http://127.0.0.1:5500/activities.html";
+        };
 
         function SEND_FOR_POST()
         {
