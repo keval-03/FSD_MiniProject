@@ -54,7 +54,7 @@ const activities_post = async (req, res) => {
     }
     //console.log(member_names)
     ans["member_names"] = member_names;
-
+    ans["group_name"] = await get_group_name(group_id)
     console.log(ans);
     res.json(ans);
   } else if (req.body.task === "NEW ACTIVITY") {
@@ -85,17 +85,19 @@ const activities_post = async (req, res) => {
       console.log(id[0][0]["user_id"]);
       if (id[0][0]["user_id"] == user_id) {
         ans["spent"] = map[i]["spent"];
-        ans["paid"] = map[i]["pay"];
+        ans["paid"] = map[i]["paid"];
       }
 
       id_arr.push(id[0][0]["user_id"]);
       //console.log(id[0][0]["user_id"])
 
-      paid_arr.push(map[i]["pay"]);
+      paid_arr.push(map[i]["paid"]);
       //console.log(map[i]["pay"])
 
       spent_arr.push(map[i]["spent"]);
       //console.log(map[i]["spent"])
+
+      await update_members(group_id,map[i]["paid"],map[i]["spent"],id[0][0]["user_id"])
     }
     //console.log(id_arr)
     //console.log(paid_arr)
@@ -164,6 +166,26 @@ async function gen_query_insert(
 
   //console.log(query)
   return query;
+}
+
+
+async function update_members(group_id,paid,spent,user_id)
+{
+    let table_name = "members_"+String(group_id);
+    query = `UPDATE ${table_name} SET paid = paid+${paid} , spent = spent+${spent} WHERE user_id=${user_id}`
+
+    result = await connection.execute(query)
+    console.log(`Updated for ${user_id}`)
+}
+
+
+async function get_group_name(group_id)
+{
+	let query = `SELECT group_name FROM MAIN_groups WHERE group_id=${group_id}`
+	result = await connection.execute(query);
+	//console.log(result[0][0]["group_name"])
+
+	return result[0][0]["group_name"]
 }
 
 module.exports = { activities_post };
