@@ -97,7 +97,7 @@ const activities_post = async (req, res) => {
       spent_arr.push(map[i]["spent"]);
       //console.log(map[i]["spent"])
 
-      await update_members(group_id,map[i]["paid"],map[i]["spent"],id[0][0]["user_id"])
+      await update_members(group_id, map[i]["paid"], map[i]["spent"], id[0][0]["user_id"])
     }
     //console.log(id_arr)
     //console.log(paid_arr)
@@ -155,7 +155,7 @@ async function gen_query_insert(
 
   let date = await connection.execute("SELECT NOW()");
   date = date[0][0]["NOW()"];
-  console.log("date",date)
+  console.log("date", date)
 
   query = query + `) VALUES ("${activity_name}" , '${date}' `;
 
@@ -169,23 +169,21 @@ async function gen_query_insert(
 }
 
 
-async function update_members(group_id,paid,spent,user_id)
-{
-    let table_name = "members_"+String(group_id);
-    query = `UPDATE ${table_name} SET paid = paid+${paid} , spent = spent+${spent} WHERE user_id=${user_id}`
+async function update_members(group_id, paid, spent, user_id) {
+  let table_name = "members_" + String(group_id);
+  query = `UPDATE ${table_name} SET paid = paid+${paid} , spent = spent+${spent} WHERE user_id=${user_id}`
 
-    result = await connection.execute(query)
-    console.log(`Updated for ${user_id}`)
+  result = await connection.execute(query)
+  console.log(`Updated for ${user_id}`)
 }
 
 
-async function get_group_name(group_id)
-{
-	let query = `SELECT group_name FROM MAIN_groups WHERE group_id=${group_id}`
-	result = await connection.execute(query);
-	//console.log(result[0][0]["group_name"])
+async function get_group_name(group_id) {
+  let query = `SELECT group_name FROM MAIN_groups WHERE group_id=${group_id}`
+  result = await connection.execute(query);
+  //console.log(result[0][0]["group_name"])
 
-	return result[0][0]["group_name"]
+  return result[0][0]["group_name"]
 }
 
 module.exports = { activities_post };
