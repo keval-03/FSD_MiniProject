@@ -161,8 +161,9 @@
     .btn {
       border-radius: 1.2rem;
       position: absolute;
-      right: 10px;
+      right: 100px;
       top: auto;
+      width: 150px;
     }
 
     .inputCont {
@@ -186,6 +187,9 @@
       font-size: 1.2rem;
       border-radius: 10px;
       background-color: lightgray;
+    }
+    span{
+      font-size: 18px;
     }
   </style>
   <body>
@@ -213,9 +217,7 @@
     </div>
     <div id="sticky"></div>
     <div id = "settle_list">
-      <div>
-        <p><span>You are owed </span><span>amount</span><span> from give_id.</span><button class="btn btn-success">Settle</button></p>
-      </div>
+      
     </div>
 
   </body>
@@ -235,7 +237,10 @@
                 }
         });
   });
+  let index = 0;
+  let flag = 0;
     function show_settling(r){
+      index++;
       let settle_list = document.getElementById("settle_list");
       let user_id = localStorage.getItem('user_id');
       let g_id = r["give_id"];
@@ -243,12 +248,69 @@
       let amt = r["amount"];
       let g_mail = r["give_mail"];
       let t_mail = r["take_mail"];
-      
-      if(t_mail === user_id){
-        var bt = document.getElementById("settle_btn");
-        bt.disabled = true;
+
+      console.log("r",r);
+      let res = r;
+      var txt;
+      var clr;
+      var mail;
+      var bt;
+      if(t_id == user_id){
+        txt = " You are owed ";
+        clr = "green";
+        mail = g_mail;
+        bt = "<button class='btn btn-success' id = 'settle_btn"+index+"' onclick='settle(this.id,res)'>Settle</button>";
+      }
+      else {
+        txt = " You owe ";
+        clr = "red";
+        mail = t_mail;
+        bt = "";
+      }
+
+      const nextItm = `<div>
+                        <p>
+                          <span style = "color: white">`+mail+` : </span>
+                          <span style = "color: white">`+txt+`</span>
+                          <span style = "color:`+clr+`;">`+amt+` rupees.</span>
+                          `+bt+`
+                        </p>
+                      </div>`;
+      if (amt != 0){
+        flag++;
+        settle_list.insertAdjacentHTML('beforeend',nextItm);
       }
     }
+
+    function SEND_NEW_ACTIVITY(js){
+      console.log("here",js);
+
+      axios.post("http://localhost:3005/api/v1/settle", js)
+        .then(function (response) 
+        {
+          let r = response.data
+          console.log("here",r);
+          document.location.reload();
+          // addExpenses(r);
+        })
+        .catch(function (error) 
+        {
+          console.log(error);
+        });
+      }
+
+    function settle(id,res){
+      id = id.slice(10,id.length);
+      id = Number(id);
+      console.log(res[i-1]);
+      give_id = res[id-1]["give_id"];
+      take_id = res[id-1]["take_id"];
+      group_id = localStorage.getItem('group_id');
+      amount = res[id-1]["amount"];
+      js = {"give_id":give_id,"take_id":take_id,"task":"AMOUNT SETTLED","group_id":group_id,"amount":amount};
+      SEND_NEW_ACTIVITY(js);
+    }
+
     function SEND_FOR_POST()
         {
           let user_id = localStorage.getItem('user_id');
@@ -270,6 +332,10 @@
               for(i=0;i<res.length;i++)
               {
                 show_settling(res[i]);
+              }
+              if(flag == 0){
+                var settle_list = document.getElementById("settle_list");
+                settle_list.innerHTML="<p style = 'color: white; font-size:20px; text-align:center;'>All settled up.</p>"
               }
 
             })
