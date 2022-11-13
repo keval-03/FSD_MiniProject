@@ -136,21 +136,18 @@
       background-color: #36454f;
     }
 
-    #expenses_list{
+    #mssgs_list{
       position:relative;
       margin:0 20%;
-      margin-bottom: 50px;
+      margin-bottom: 100px;
     }
-    .exp_div:hover{
-      cursor: pointer;
-      box-shadow: 10px 5px 10px #49e7ca;
-    }
-    .exp_div{
+    
+    .mssgs_div{
       background-color: white;
       border-radius: 3px;
       width:100%;
-      height:70px;
-      padding:10px;
+      height:auto;
+      padding:10px 10px 3px 10px;
     }
     #sticky {
       display: none;
@@ -165,7 +162,7 @@
     }
 
     .inputCont {
-      position: absolute;
+      position: fixed;
       bottom: 0;
       width: 78%;
       height: fit-content;
@@ -211,13 +208,13 @@
           </nav>
     </div>
     <div id="sticky"></div>
-    <div id = "expenses_list">
+    <div id = "mssgs_list">
+      
     </div>
 
     <div class="inputCont">
-        <span
-          ><input class="mssg_input" type="text" placeholder="Enter the message"/></span>
-        <span><button class="btn btn-primary" onclick="add_mssg()">SUBMIT</button></span>
+        <span><input class="mssg_input" type="text" placeholder="Enter the message"/></span>
+        <span><button class="btn btn-primary" onclick="submit_mssg()">SUBMIT</button></span>
       </div>
   </body>
 
@@ -237,9 +234,98 @@
                 }
         });
   });
-    let mssgs_list=document.querySelector(".mssgs_list");
-    function add_mssg(){
-      
-    }
+
+  
+
+    let id=0;
+    function add_mssg(r){
+        // let name = r["activity_name"];
+        let date = r["date_time"];
+        let value=r["announcement"]
+        // let mssg_val=document.querySelector('.mssg_input').value;
+        date = date.slice(0,date.length-31);
+        let time = date.substring(16,21);
+        date = date.substring(4,15);
+        console.log(time);
+        console.log(date);
+          const mssg_list=document.querySelector('#mssgs_list');
+          const NextMssg = `<div style="margin-top: 15px;" class="mssgs_div">                           
+                              <p style="line-height: 20px; font-size: 20px;">`+value+`</p>
+                              <p style="line-height: 0; font-size:12px; color:gray; text-align: right; margin-right: 5px;">`+time+" "+date+`</p>
+                            </div>`;
+          // console.log(memList);
+          //memList.innerHTML +="<div class=newMem id="+ind+"><input type=text class=memInput placeholder=EnterMember></input><button class=btn id="+ind+" onclick=delete_member(this.id)><span aria-hidden=true>&times;</span></button></div>";
+          // memList.innerHTML="";
+          mssg_list.insertAdjacentHTML('afterbegin',NextMssg);             
+        };
+
+        function SEND_NEW_ACTIVITY(js){
+
+          axios.post("http://localhost:3005/api/v1/announcements", js)
+            .then(function (response) 
+            {
+              let r = response.data
+              console.log("here",r);
+              document.location.reload();
+              // addExpenses(r);
+            })
+            .catch(function (error) 
+            {
+              console.log(error);
+            });
+          }
+
+
+        function submit_mssg(){
+          let mssg_val=document.querySelector('.mssg_input').value;
+          let user_id = localStorage.getItem('user_id');
+          let group_id = localStorage.getItem('group_id');
+
+          js = {"group_id":group_id,"user_id":user_id,"task":"MAKE ANNOUNCEMENTS","announcement":mssg_val};
+          console.log("js=",js);
+          
+          SEND_NEW_ACTIVITY(js);
+        }
+
+         
+
+        function SEND_FOR_POST()
+        {
+
+          let group_id = localStorage.getItem('group_id');
+          let user_id = localStorage.getItem('user_id');
+          console.log(group_id);
+          console.log(user_id);
+
+          json = { "group_id":group_id,"user_id":user_id , "task":"GET ANNOUNCEMENTS"}
+
+
+          axios.post("http://localhost:3005/api/v1/announcements", json)
+            .then(function (response) 
+            {
+              console.log(response.data);
+              res = response.data;
+              res = res["mapping"]
+              console.log("res",res)
+              console.log("res"+res.length)
+
+              for(i=0;i<res.length;i++)
+              {
+                add_mssg(res[i])
+              }
+              member_names = response.data.member_names;
+
+            })
+            .catch(function (error) 
+            {
+              console.log(error);
+            });
+
+
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+          SEND_FOR_POST()
+        });
   </script>
 </html>
