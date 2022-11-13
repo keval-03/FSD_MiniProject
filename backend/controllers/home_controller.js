@@ -151,6 +151,7 @@ const home_post = async (req, res) => {
     //console.log(q)
     result = await connection.execute(q);
 
+    console.log("announcements_" + String(right_json["group_id"]));
     // announcements_[group_id] table --> by_id , announcement , dtime
     table_name = "announcements_" + String(right_json["group_id"]);
     table_name_2 = "members_" + String(right_json["group_id"]);
