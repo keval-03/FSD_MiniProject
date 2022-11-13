@@ -92,14 +92,14 @@ const home_post = async (req, res) => {
     //console.log("ID OF GROUP INSERTED IS: ", rows["insertId"])
     right_json["group_id"] = rows["insertId"];
 
+    flag = false
     // then do the mapping of user_id and group_id in MAIN_users__groups table
-    ids_array.push(user_id);
-    for (i = 0; i < ids_array.length; i++) {
-      [rows, cols] = await connection.execute(
-        "CALL insert_user_id_group_id(?,?)",
-        [ids_array[i], right_json["group_id"]]
-      );
+    for (i = 0; i < ids_array.length; i++) 
+    {
+      if(ids_array[i] == user_id) flag=true;
+      [rows, cols] = await connection.execute("CALL insert_user_id_group_id(?,?)",[ids_array[i], right_json["group_id"]]);
     }
+    if(flag==false)   ids_array.push(user_id);
 
     // members_[group_id] table --> user_id , spent , paid
     //console.log("members_"+String(right_json["group_id"]))

@@ -212,9 +212,14 @@ REQUEST FROM STATUS
 
 RESPONSE
 {
-	"user_email":
-	"paid":
-	"spent":
+	mapping:
+	[
+		{
+			"user_email":
+			"paid":
+			"spent":
+		},
+	]
 }
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -245,9 +250,9 @@ i.) if task is "GET LOGS"
 
 ii.) if task is "UNSETTLE"
 {
-	for_id:
-	by_id:
-	amount:
+	"task":
+	"group_id":
+	"btn_id":
 }
 
 
@@ -255,8 +260,19 @@ RESPONSE FROM LOGS
 
 i.) if task is "GET LOGS"
 {
-	
+	mapping:
+	[
+		{
+			"logs":
+			"dtime":
+			"btn_id":
+		},
+	]
 }
+
+ii.) if task is "UNSETTLE"
+
+	"UNSETTLE SUCCESSFULL"
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 REQUEST FROM SETTLES
