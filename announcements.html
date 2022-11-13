@@ -138,7 +138,7 @@
 
     #mssgs_list{
       position:relative;
-      margin:0 20%;
+      margin:0 10%;
       margin-bottom: 100px;
     }
     
@@ -159,6 +159,7 @@
       position: absolute;
       right: 10px;
       top: auto;
+      transform: translate(-50% 0);
     }
 
     .inputCont {
@@ -241,7 +242,8 @@
     function add_mssg(r){
         // let name = r["activity_name"];
         let date = r["date_time"];
-        let value=r["announcement"]
+        let value=r["announcement"];
+        let name = r["user_name"];
         // let mssg_val=document.querySelector('.mssg_input').value;
         date = date.slice(0,date.length-31);
         let time = date.substring(16,21);
@@ -249,8 +251,11 @@
         console.log(time);
         console.log(date);
           const mssg_list=document.querySelector('#mssgs_list');
-          const NextMssg = `<div style="margin-top: 15px;" class="mssgs_div">                           
+          const NextMssg = `
+                            <div style="margin-top: 15px;" class="mssgs_div">
+                              <p style="text-align:left; line-height:5px; color:#002B5B;"><strong>`+name+`</strong></p>                           
                               <p style="line-height: 20px; font-size: 20px;">`+value+`</p>
+                              
                               <p style="line-height: 0; font-size:12px; color:gray; text-align: right; margin-right: 5px;">`+time+" "+date+`</p>
                             </div>`;
           // console.log(memList);

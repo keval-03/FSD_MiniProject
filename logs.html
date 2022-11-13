@@ -136,56 +136,22 @@
       background-color: #36454f;
     }
 
-    #expenses_list{
+    #logs_list{
       position:relative;
       margin:0 20%;
       margin-bottom: 50px;
     }
-    .exp_div:hover{
-      cursor: pointer;
-      box-shadow: 10px 5px 10px #49e7ca;
-    }
-    .exp_div{
+    
+    .logs_div{
       background-color: white;
       border-radius: 3px;
       width:100%;
       height:70px;
       padding:10px;
     }
-    #sticky {
-      display: none;
-      height: 10px;
-    }
+    
+    
 
-    .btn {
-      border-radius: 1.2rem;
-      position: absolute;
-      right: 10px;
-      top: auto;
-    }
-
-    .inputCont {
-      position: absolute;
-      bottom: 0;
-      width: 78%;
-      height: fit-content;
-      padding: 10px;
-      margin: 50px;
-      margin-bottom: 20px;
-      background-color: lightgray;
-      border:#36454f solid;
-      border-radius: 1.5rem;
-    }
-
-    .mssg_input {
-      width: 50%;
-      border: none;
-      border-bottom: #36454f solid thin;
-      width: 92%;
-      font-size: 1.2rem;
-      border-radius: 10px;
-      background-color: lightgray;
-    }
   </style>
   <body>
     <div class="jumbotron">
@@ -211,14 +177,10 @@
           </nav>
     </div>
     <div id="sticky"></div>
-    <div id = "expenses_list">
+    <div id = "logs_list">
     </div>
 
-    <div class="inputCont">
-        <span
-          ><input class="mssg_input" type="text" placeholder="Enter the message"/></span>
-        <span><button class="btn btn-primary" onclick="add_mssg()">SUBMIT</button></span>
-      </div>
+    
   </body>
 
   <script>
@@ -237,8 +199,34 @@
         });
   });
     let mssgs_list=document.querySelector(".mssgs_list");
-    function add_mssg(){
-      
+    function show_logs(){
+
     }
+
+    function SEND_NEW_ACTIVITY(js){
+
+          axios.post("http://localhost:3005/api/v1/announcements", js)
+            .then(function (response) 
+            {
+              let r = response.data;
+              console.log("here",r);
+              document.location.reload();
+              // addExpenses(r);
+            })
+            .catch(function (error) 
+            {
+              console.log(error);
+            });
+          }
+
+    function logs(){
+          let user_id = localStorage.getItem('user_id');
+          let group_id = localStorage.getItem('group_id');
+
+          js = {"group_id":group_id,"user_id":user_id};
+          console.log("js=",js);
+          
+          SEND_NEW_ACTIVITY(js);
+        }
   </script>
 </html>
