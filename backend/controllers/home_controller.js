@@ -123,7 +123,7 @@ const home_post = async (req, res) => {
     query =
       "CREATE TABLE " +
       table_name +
-      " (by_id INTEGER, for_id INTEGER, amount INTEGER, state TINYINT, FOREIGN KEY (by_id) REFERENCES MAIN_users(user_id), FOREIGN KEY (for_id) REFERENCES MAIN_users(user_id) )";
+      " (btn_id INTEGER PRIMARY KEY AUTO_INCREMENT,by_id INTEGER, for_id INTEGER, amount INTEGER, FOREIGN KEY (by_id) REFERENCES MAIN_users(user_id), FOREIGN KEY (for_id) REFERENCES MAIN_users(user_id) )";
     //console.log(query)
     result = await connection.execute(query);
     // cosnole.log(rows)
@@ -155,6 +155,8 @@ const home_post = async (req, res) => {
     // announcements_[group_id] table --> by_id , announcement , dtime
     table_name = "announcements_" + String(right_json["group_id"]);
     table_name_2 = "members_" + String(right_json["group_id"]);
+    table_name_3 = "buttons_" + String(right_json["group_id"]);
+    
     query =
       "CREATE TABLE " +
       table_name +
@@ -169,11 +171,12 @@ const home_post = async (req, res) => {
     query =
       "CREATE TABLE " +
       table_name +
-      " ( by_id INTEGER , for_id INTEGER DEFAULT NULL,  logs VARCHAR(3000) , dtime VARCHAR(2048), FOREIGN KEY (by_id) references " +
+      " ( by_id INTEGER , for_id INTEGER DEFAULT NULL,  logs VARCHAR(3000) , dtime VARCHAR(2048), btn_id INTEGER , FOREIGN KEY (by_id) references " +
       table_name_2 +
       "(user_id) , FOREIGN KEY (for_id) references " +
       table_name_2 +
-      "(user_id) )";
+      "(user_id) , FOREIGN KEY (btn_id) references "+
+      table_name_3 + "(btn_id) )";
     result = await connection.execute(query);
 
     // INSERTING VALUES IN LOGS
