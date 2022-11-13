@@ -46,8 +46,8 @@
     .btn {
       border-radius: 1.5rem;
       position: absolute;
-      right: 0;
-      top: 0;
+      right: 2%;
+      top: 3px;
     }
 
     .addGrpModal {
@@ -144,6 +144,8 @@
     }
     
     .logs_div{
+      position: relative;
+      margin-top: 10px;
       background-color: white;
       border-radius: 3px;
       width:100%;
@@ -199,14 +201,41 @@
                 }
         });
   });
-    let mssgs_list=document.querySelector(".mssgs_list");
-    function show_logs(){
+    
+    function show_logs(r){
+      let logs_list=document.querySelector("#logs_list");
+      let logs=r["logs"];
+      let date=r["dtime"];
+      date = date.slice(0,date.length-31);
+      let time = date.substring(16,21);
+      date = date.substring(4,15);
+      let btn_id=r["btn_id"];
+      var bt="";
+      if(btn_id != null){
+        bt="<button class='btn btn-danger' id = '"+btn_id+"' onclick='unSettle(this.id)'> Unsettle</button>";
+      }
 
+      console.log(logs);
+
+      const nextLog=`<div class="logs_div">
+                      `+bt+`
+                      <p>`+logs+`</p>
+                      <p style="line-height: 5px; font-size:12px; color:gray; text-align: right; margin-right: 5px;">`+time+" "+date+`</p>
+                  </div>`;
+                  console.log(nextLog);
+      logs_list.insertAdjacentHTML('afterbegin',nextLog);
+    }
+
+    function unSettle(id){
+      console.log(id);
+      let group_id = localStorage.getItem('group_id');
+      js = {"task":"UNSETTLE","group_id":group_id,"btn_id":id};
+      SEND_NEW_ACTIVITY(js);
     }
 
     function SEND_NEW_ACTIVITY(js){
 
-          axios.post("http://localhost:3005/api/v1/announcements", js)
+          axios.post("http://localhost:3005/api/v1/logs", js)
             .then(function (response) 
             {
               let r = response.data;
@@ -224,10 +253,48 @@
           let user_id = localStorage.getItem('user_id');
           let group_id = localStorage.getItem('group_id');
 
-          js = {"group_id":group_id,"user_id":user_id};
+          js = {"group_id":group_id,"user_id":user_id,"task":"GET LOGS"};
           console.log("js=",js);
           
           SEND_NEW_ACTIVITY(js);
         }
+
+        function SEND_FOR_POST()
+        {
+          let group_id = localStorage.getItem('group_id');
+          let user_id = localStorage.getItem('user_id');
+          console.log(group_id);
+          console.log(user_id);
+
+          json = {"group_id":group_id,"user_id":user_id,"task":"GET LOGS"}
+
+
+          axios.post("http://localhost:3005/api/v1/logs", json)
+            .then(function (response) 
+            {
+              console.log(response.data);
+              res = response.data;
+              res = res["mapping"]
+              console.log("res",res)
+              console.log("res"+res.length)
+
+              for(i=0;i<res.length;i++)
+              {
+                show_logs(res[i])
+              }
+        
+
+            })
+            .catch(function (error) 
+            {
+              console.log(error);
+            });
+
+
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+          SEND_FOR_POST()
+        });
   </script>
 </html>

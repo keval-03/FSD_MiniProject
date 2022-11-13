@@ -52,7 +52,7 @@ const settle_post = async (req, res) => {
     let results = await connection.execute(
       `INSERT INTO ${table_name} VALUES ( ${take_id} , ${give_id} , "${created}" , '${date}' , ${inserted_id} ) `
     );
-
+    console.log(results)
     res.json({ "button_id": inserted_id });
   }
 };
