@@ -123,7 +123,7 @@ const home_post = async (req, res) => {
     query =
       "CREATE TABLE " +
       table_name +
-      " (btn_id INTEGER PRIMARY KEY AUTO_INCREMENT,by_id INTEGER, for_id INTEGER, amount INTEGER, FOREIGN KEY (by_id) REFERENCES MAIN_users(user_id), FOREIGN KEY (for_id) REFERENCES MAIN_users(user_id) )";
+      " (btn_id INTEGER PRIMARY KEY AUTO_INCREMENT,take_id INTEGER, give_id INTEGER, amount INTEGER, FOREIGN KEY (by_id) REFERENCES MAIN_users(user_id), FOREIGN KEY (for_id) REFERENCES MAIN_users(user_id) )";
     //console.log(query)
     result = await connection.execute(query);
     // cosnole.log(rows)
@@ -156,7 +156,7 @@ const home_post = async (req, res) => {
     table_name = "announcements_" + String(right_json["group_id"]);
     table_name_2 = "members_" + String(right_json["group_id"]);
     table_name_3 = "buttons_" + String(right_json["group_id"]);
-    
+
     query =
       "CREATE TABLE " +
       table_name +
@@ -175,7 +175,7 @@ const home_post = async (req, res) => {
       table_name_2 +
       "(user_id) , FOREIGN KEY (for_id) references " +
       table_name_2 +
-      "(user_id) , FOREIGN KEY (btn_id) references "+
+      "(user_id) , FOREIGN KEY (btn_id) references " +
       table_name_3 + "(btn_id) )";
     result = await connection.execute(query);
 
@@ -191,7 +191,7 @@ const home_post = async (req, res) => {
 
     user_email = user_email[0][0]["user_email"];
     created = `"GROUP ${group_name} CREATED BY ${user_email}"`;
-    query = `INSERT INTO ${table_name} VALUES (${user_id},NULL,${created},'${dt}')`;
+    query = `INSERT INTO ${table_name} VALUES (${user_id},NULL,${created},'${dt}',NULL)`;
 
     result = await connection.execute(query);
     //console.log(result)
@@ -206,7 +206,7 @@ const home_post = async (req, res) => {
       user_email = user_email[0][0]["user_email"];
 
       created = `"${user_email} is added to the group"`;
-      query = `INSERT INTO ${table_name} VALUES (${ids_array[i]},NULL,${created},'${dt}')`;
+      query = `INSERT INTO ${table_name} VALUES (${ids_array[i]},NULL,${created},'${dt}',NULL)`;
       result = await connection.execute(query);
     }
 

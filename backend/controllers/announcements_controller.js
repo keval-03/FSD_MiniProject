@@ -79,7 +79,7 @@ async function make_announcement(group_id, user_id, announcement) {
     let result = await connection.execute(query)
 
     table_name = `logs_${group_id}`
-    query = `INSERT INTO ${table_name} VALUES (${user_id},NULL,"${user_name} made an announcement",'${date_time}')`
+    query = `INSERT INTO ${table_name} VALUES (${user_id},NULL,"${user_name} made an announcement",'${date_time}',NULL)`
     result = await connection.execute(query);
 
     js = {"user_name":user_name,"date_time":date_time}

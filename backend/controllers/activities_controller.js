@@ -136,7 +136,7 @@ const activities_post = async (req, res) => {
     //console.log(result[0]["insertId"])
 
     table_name = "logs_" + String(group_id);
-    query = `INSERT INTO ${table_name} VALUES(${user_id},NULL,"Expense for ${activity_name} was added ","${date}")`;
+    query = `INSERT INTO ${table_name} VALUES(${user_id},NULL,"Expense for ${activity_name} was added ","${date}",NULL)`;
     result = connection.execute(query);
 
     console.log(ans);
