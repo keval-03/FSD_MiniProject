@@ -123,7 +123,7 @@ const home_post = async (req, res) => {
     query =
       "CREATE TABLE " +
       table_name +
-      " (btn_id INTEGER PRIMARY KEY AUTO_INCREMENT,take_id INTEGER, give_id INTEGER, amount INTEGER, FOREIGN KEY (by_id) REFERENCES MAIN_users(user_id), FOREIGN KEY (for_id) REFERENCES MAIN_users(user_id) )";
+      " (btn_id INTEGER PRIMARY KEY AUTO_INCREMENT,take_id INTEGER, give_id INTEGER, amount INTEGER, FOREIGN KEY (take_id) REFERENCES MAIN_users(user_id), FOREIGN KEY (give_id) REFERENCES MAIN_users(user_id) )";
     //console.log(query)
     result = await connection.execute(query);
     // cosnole.log(rows)
@@ -176,7 +176,8 @@ const home_post = async (req, res) => {
       "(user_id) , FOREIGN KEY (for_id) references " +
       table_name_2 +
       "(user_id) , FOREIGN KEY (btn_id) references " +
-      table_name_3 + "(btn_id) )";
+      table_name_3 +
+      "(btn_id) )";
     result = await connection.execute(query);
 
     // INSERTING VALUES IN LOGS

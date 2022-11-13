@@ -4,7 +4,8 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Announcements</title>
+    <link rel="icon" type="image/x-icon" href="/images/logo_icon.ico" />
+    <title>Settle</title>
 
     <!-- CSS only -->
     <link
@@ -136,7 +137,7 @@
       background-color: #36454f;
     }
 
-    #expenses_list{
+    #settle_list{
       position:relative;
       margin:0 20%;
       margin-bottom: 50px;
@@ -202,23 +203,21 @@
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
                 <a class="nav-item nav-link" href="/activities.html">Activities</a>
-                <a class="nav-item nav-link">Announcements</a>
+                <a class="nav-item nav-link" href="/announcements.html">Announcements</a>
                 <a class="nav-item nav-link" href="/logs.html">Logs</a>
                 <a class="nav-item nav-link" href="/status.html">Status</a>
-                <a class="nav-item nav-link active" href="/settle.html">Settle</a>
+                <a class="nav-item nav-link active">Settle</a>
                 </div>
             </div>
           </nav>
     </div>
     <div id="sticky"></div>
-    <div id = "expenses_list">
+    <div id = "settle_list">
+      <div>
+        <p><span>You are owed </span><span>amount</span><span> from give_id.</span><button class="btn btn-success">Settle</button></p>
+      </div>
     </div>
 
-    <div class="inputCont">
-        <span
-          ><input class="mssg_input" type="text" placeholder="Enter the message"/></span>
-        <span><button class="btn btn-primary" onclick="add_mssg()">SUBMIT</button></span>
-      </div>
   </body>
 
   <script>
@@ -236,9 +235,54 @@
                 }
         });
   });
-    let mssgs_list=document.querySelector(".mssgs_list");
-    function add_mssg(){
+    function show_settling(r){
+      let settle_list = document.getElementById("settle_list");
+      let user_id = localStorage.getItem('user_id');
+      let g_id = r["give_id"];
+      let t_id = r["take_id"];
+      let amt = r["amount"];
+      let g_mail = r["give_mail"];
+      let t_mail = r["take_mail"];
       
+      if(t_mail === user_id){
+        var bt = document.getElementById("settle_btn");
+        bt.disabled = true;
+      }
     }
+    function SEND_FOR_POST()
+        {
+          let user_id = localStorage.getItem('user_id');
+          let group_id = localStorage.getItem('group_id');
+          console.log(user_id,group_id);
+
+          json = {"user_id":user_id, "group_id":group_id , "task":"GET SETTLES"}
+
+
+          axios.post("http://localhost:3005/api/v1/settle", json)
+            .then(function (response) 
+            {
+              console.log(response.data);
+              res = response.data;
+              res = res["mapping"]
+              console.log("res",res)
+              console.log("res"+res.length)
+
+              for(i=0;i<res.length;i++)
+              {
+                show_settling(res[i]);
+              }
+
+            })
+            .catch(function (error) 
+            {
+              console.log(error);
+            });
+
+
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+          SEND_FOR_POST()
+        });
   </script>
 </html>
