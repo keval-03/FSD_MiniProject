@@ -23,6 +23,7 @@
       crossorigin="anonymous"
     ></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 
 <style>
@@ -42,16 +43,172 @@
     .nav-item{
         color: white;
     }
+
+    .btn {
+      border-radius: 1.5rem;
+      position: absolute;
+      right: 0;
+      top: 0;
+    }
+
+    .addGrpModal {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 40%;
+      background-color: white;
+      border-radius: 5px;
+      box-shadow: 0 3rem 5rem rgba(0, 0, 0, 0.3);
+      z-index: 10;
+      max-height: 50%;
+    }
+
+    .hidden{
+        display: none;
+    }
+
+    .submitModal{
+      position: relative;
+      margin: 5px 10px;
+    }
+
+    .cancelModal{
+      position: relative;
+    }
+
+    .membersList{
+      position: relative;
+      max-height:200px; 
+      overflow-y:scroll;    
+    }
+
+    .newMem{
+      position: relative;
+      margin: 5px 15px;
+    }
+
+    .nameSpan{
+      width: 200px;
+    }
+
+    .memInput{
+      position: absolute;
+      width: 20%;
+      border: none;
+      margin-bottom: 10px;
+      border-bottom: black ridge thin;
+    }
+
+    .memInput::placeholder{
+      text-align: center;
+    }
+
+    .errModal {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 40%;
+      display: none;
+      background-color: white;
+      padding: 6rem;
+      border-radius: 5px;
+      box-shadow: 0 3rem 5rem rgba(0, 0, 0, 0.3);
+      z-index: 50;
+    }
+
+    .err_gif {
+      height: 40px;
+      width: 40px;
+    }
+
+    .close-errModal {
+      position: absolute;
+      top: 40px;
+      right: 32px;
+      font-size: 5rem;
+      color: #333;
+      cursor: pointer;
+      border: none;
+      background: none;
+    }
+    #container_header{
+      z-index: 1;
+      background-color: #36454f;
+    }
+
+    #expenses_list{
+      position:relative;
+      margin:0 20%;
+      margin-bottom: 50px;
+    }
+    .exp_div:hover{
+      cursor: pointer;
+      box-shadow: 10px 5px 10px #49e7ca;
+    }
+    .exp_div{
+      background-color: white;
+      border-radius: 3px;
+      width:100%;
+      height:70px;
+      padding:10px;
+    }
+    #sticky {
+      display: none;
+      height: 10px;
+    }
+
+    
+
 </style>
 <body>
+  <div class="errModal">
+    <button class="close-errModal">&times;</button>
+    <p>
+
+      <img class="err_gif" src="/images/55-error-solid.gif" alt="">
+      <span class="modal_errMssg"></span>
+    </p>
+  </div>
+  <div class="overlay"></div>
+  <div class="addGrpModal hidden" id="addExpModal" role="dialog">
+    <div class="container" style="position: relative;">
+          <div class="modalHeader" style= "margin-bottom: 5px; padding: 5px;">
+              <input type="text" id="Exp_name" placeholder="Add Expense Name" style="border: none; border-bottom: #36454f solid thin; width: 60%; font-size: 1.5rem;">
+                  <button type="button" class="btn close" onclick="close_addExpModal()" style="font-size: 1.5rem;">
+                      <span aria-hidden="true" >&times;</span>
+                  </button>
+          </div>
+
+          <div class="modal_Body" style="padding: 5px; position: relative; margin-top: 10px;">
+            <!-- <div class="modalHeading">
+              <h5 style="color: black;">Members</h5>
+              <button class="btn btn-primary" id="add_mem" type = "button" onclick="addMem()" ></button>
+            </div> -->
+              <div class="membersList">
+                
+              </div>
+          </div>
+
+          <div class="modal-footer" style="position: relative;">
+            <span>
+              <button class="btn btn-primary submitModal" id = "submit_group_button"onclick="submit_expense()">Submit</button>
+            </span>
+            <span>
+              <button class="btn btn-secondary cancelModal" onclick="close_addExpModal()">Cancel</button>
+            </span>
+          </div>
+    </div>    
+  </div>
     <div class="jumbotron">
       <img src="/images/home_banner.png" alt="" width="100%" height="180px" />
     </div>
 
     <div class="container">
-      <div class="heading">
-           <nav class="navbar navbar-expand-lg navbar-light">  
-            <h3 class="navbar-brand" style="color: white;">GRP NAME</h3>
+      <div class="heading" id="container_header">
+          <nav class="navbar navbar-expand-lg navbar-light">  
+            <h3 class="navbar-brand" id ="group_name" style="color: white; font-size: 25px;">GRP NAME</h3>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -64,7 +221,226 @@
                 <a class="nav-item nav-link" href="#">Settle</a>
                 </div>
             </div>
-</nav>
+          </nav>
+          <button type="button" class="btn btn-primary" id="Add_exp_btn" onclick="show_addExpModal()">
+            + ADD EXPENSE 
+          </button>
     </div>
-</body>
+    <div id="sticky"></div>
+    <div id = "expenses_list">
+    </div>
+  </body>
+
+
+  <script>
+    let expModal=document.getElementById("addExpModal");
+
+    var member_names;
+
+    //jquey function to stickheader to top
+    $(function(){
+        var stickyHeaderTop = $('#container_header').offset().top;
+ 
+        $(window).scroll(function(){
+                if( $(window).scrollTop() > stickyHeaderTop ) {
+                        $('#stickytypeheader').css({position: 'fixed', top: '0px'});
+                        $('#sticky').css('display', 'block');
+                } else {
+                        $('#stickytypeheader').css({position: 'static', top: '0px'});
+                        $('#sticky').css('display', 'none');
+                }
+        });
+  });
+    
+    function show_addExpModal(){
+      var bt = document.getElementById("Add_exp_btn");
+      bt.disabled = true;
+      for(let i = 0; i < member_names.length; i++){
+        addMem(member_names[i],i+1);
+      }
+      expModal.classList.remove('hidden');
+    }
+
+    function close_addExpModal(){
+      var bt = document.getElementById("Add_exp_btn");
+      bt.disabled = false;
+      document.querySelector('.membersList').innerHTML="";
+      expModal.classList.add('hidden');
+    }
+
+    function closeErrModal() {
+          document.querySelector(".errModal").style.display = "none";
+          document.querySelector(".overlay").style.display = "none";
+        }
+        function showErrModal() {
+          document.querySelector(".errModal").style.display = "block";
+          document.querySelector(".overlay").style.display = "block";
+        }
+        document
+        .querySelector(".close-errModal")
+        .addEventListener("click", closeErrModal);
+    
+
+    function addMem(name,id){
+          // user_name(array);
+          const memList=document.querySelector('.membersList');
+          const NextMem = `<div class="newMem" id="`+id+`">
+                            <span class = "nameSpan">`+name+`</span>
+                            <input type="number" style="right: 35%;" class="memInput" placeholder="Spent" id="S`+id+`">
+                            </input>
+                            <input type="number" style="right: 5%;" class="memInput" placeholder="Paid" id="P`+id+`">
+                            </input>
+                          </div>`;
+          console.log(NextMem);
+          // console.log(memList);
+          //memList.innerHTML +="<div class=newMem id="+ind+"><input type=text class=memInput placeholder=EnterMember></input><button class=btn id="+ind+" onclick=delete_member(this.id)><span aria-hidden=true>&times;</span></button></div>";
+          // memList.innerHTML="";
+          memList.innerHTML+=NextMem;                 
+        };
+
+        let id = 0;
+
+    function addExpenses(r){
+        let id = r["acitivity_time"];
+        let name = r["activity_name"];
+        let date = r["activity_time"];
+        let spent = r["spent"];
+        let paid = r["paid"];
+        console.log(r);
+        date = date.slice(0,date.length-31);
+        let time = date.substring(16,21);
+        date = date.substring(4,15);
+        console.log(time);
+        console.log(date);
+          const memList=document.querySelector('#expenses_list');
+          const NextMem = `<div style="margin-top: 15px;" class="exp_div" id="`+id+`" onclick="expenses_on_click(this.id)">
+                            <div style = " float:right;">
+                            <p style="line-height: 20px;">`+time+`</p>
+                            <p style="line-height: 10px;">`+date+`</p>
+                          </div>
+                            <p style="line-height: 20px; color: darkturquoise; font-size: 20px;"><strong>`+name+`</strong> </p>
+                            <p style="line-height: 10px;"><span style = "color:green;">You Paid `+paid+`. </span>&nbsp;<span style = "color:red;">  You Spent `+spent+`. </span></p>
+                          </div>`;
+          // console.log(memList);
+          //memList.innerHTML +="<div class=newMem id="+ind+"><input type=text class=memInput placeholder=EnterMember></input><button class=btn id="+ind+" onclick=delete_member(this.id)><span aria-hidden=true>&times;</span></button></div>";
+          // memList.innerHTML="";
+          memList.insertAdjacentHTML('beforeend',NextMem);             
+        };
+
+    function expenses_on_click(id){
+
+    }
+
+    function SEND_NEW_ACTIVITY(js){
+
+      axios.post("http://localhost:3005/api/v1/activities", js)
+        .then(function (response) 
+        {
+          let r = response.data
+          console.log("here",r);
+          document.location.reload();
+          // addExpenses(r);
+        })
+        .catch(function (error) 
+        {
+          console.log(error);
+        });
+      }
+  
+    function submit_expense(){
+      let exp_name = document.getElementById("Exp_name").value;
+      if(exp_name === ""){
+        document.querySelector(".modal_errMssg").innerHTML = "Expense Name cannot be empty.";
+        showErrModal();
+        return;
+      }
+      let flag = 0;
+      let s = 0;
+      let p = 0;
+      let map = [];
+      for(i = 1; i <= member_names.length; i++){
+        let email = member_names[i-1];
+        let spent = document.getElementById("S"+i).value;
+        let paid = document.getElementById("P"+i).value;
+        if(spent === "")
+        { 
+          spent = 0;
+          flag++;
+        }
+        if (paid === "") 
+        {
+          paid = 0;
+          flag++;
+        }
+        if(Number(spent)<0 || Number(paid)<0){
+          document.querySelector(".modal_errMssg").innerHTML = "Spent/Paid cannot have negative values.";
+          showErrModal();
+          return;
+        }
+        s+=Number(spent);
+        p+=Number(paid);
+        json = {"email": email,	"pay": Number(paid) ,"spent": Number(spent)}
+        map.push(json);
+      }
+      if(flag === 2*member_names.length) {
+        document.querySelector(".modal_errMssg").innerHTML = "All fields cannot be empty.";
+        showErrModal();
+        return;
+      }
+      if(s!=p){
+        document.querySelector(".modal_errMssg").innerHTML = "Spent/Paid mismatch.";
+        showErrModal();
+        return;
+      }
+      js = {"activity_name":exp_name,"mapping":map,"task":"NEW ACTIVITY"};
+      let user_id = localStorage.getItem('user_id');
+      let group_id = localStorage.getItem('group_id');
+      js["user_id"]=user_id;
+      js["group_id"]=group_id;
+      console.log("js at frontend",js);
+      SEND_NEW_ACTIVITY(js);
+      close_addExpModal();
+    }
+
+    
+        function SEND_FOR_POST()
+        {
+          let user_id = localStorage.getItem('user_id');
+          let group_id = localStorage.getItem('group_id');
+          console.log(user_id,group_id);
+
+          json = {"user_id":user_id, "group_id":group_id , "task":"GET ACTIVITIES"}
+
+
+          axios.post("http://localhost:3005/api/v1/activities", json)
+            .then(function (response) 
+            {
+              console.log(response.data);
+              res = response.data;
+              var g_name = document.getElementById("group_name");
+              g_name.innerHTML = res["group_name"];
+              res = res["mapping"]
+              console.log("res",res)
+              console.log("res"+res.length)
+
+              for(i=0;i<res.length;i++)
+              {
+                addExpenses(res[i])
+              }
+              member_names = response.data.member_names;
+
+            })
+            .catch(function (error) 
+            {
+              console.log(error);
+            });
+
+
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+          SEND_FOR_POST()
+        });
+
+  </script>
 </html> 

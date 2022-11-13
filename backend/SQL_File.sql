@@ -71,8 +71,26 @@ DELIMITER //
 DROP TABLE buttons_64;
 DROP TABLE activities_64;
 DROP TABLE announcements_64;
-DROP TABLE logs_64;
+DROP TABLE logs_62;
 DROP TABLE members_64;
 
 show tables;
-SELECT * FROM members_60;
+SELECT * FROM buttons_62;
+SELECT * FROM activities_62;
+SELECT * FROM announcements_62;
+SELECT * FROM logs_62;
+SELECT * FROM members_62;
+
+-- PROCEDURE TO GET user_email after passing user id
+DELIMITER //
+CREATE PROCEDURE get_user_name(IN u_id INTEGER)
+BEGIN
+	SELECT user_email from MAIN_users WHERE user_id=u_id;
+END//
+DELIMITER ;
+
+-- CALL get_user_name(1);
+
+SELECT NOW();
+INSERT INTO activities_62 (activity_name,activity_time,1_pay,1_spent,2_pay,2_spent) VALUES ( "ABC" , '2022-11-11 17:07:54' , 100 , 100 , 100 , 100 );
+INSERT INTO activities_62 (activity_name,activity_time,1_pay,1_spent,2_pay,2_spent) VALUES ( "BCD" , '2022-11-11 17:07:54' , 200 , 200 , 200 , 200 );

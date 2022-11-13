@@ -92,9 +92,6 @@
       border-bottom: black ridge thin;
     }
 
-    #btnInd{
-      position: relative;
-    }
     #grps_list{
       position:relative;
       margin:0 20%;
@@ -148,6 +145,15 @@
       background: none;
     }
 
+    #container_header{
+      z-index: 50;
+      background-color: #36454f;
+    }
+
+    #sticky {
+      display: none;
+      height: 10px;
+    }
   </style>
 
   <body>
@@ -193,18 +199,35 @@
       <img src="/images/home_banner.png" alt="" width="100%" height="180px" />
     </div>
 
-    <div class="container">
-      <div class="heading">
+    <div class="container"  >
+      <div class="heading" id="container_header">
         <h3 style="color: white;">GROUPS</h3>
             <!-- Button trigger modal -->
         <button type="button" class="btn btn-primary" onclick="show_addGrpModal()">
         + ADD GROUP 
         </button>
         </div>
+    
+        <div id="sticky"></div>
       <div id = "grps_list">
       </div>
+    </div>
 
     <script>
+
+      $(function(){
+            var stickyHeaderTop = $('#container_header').offset().top;
+    
+            $(window).scroll(function(){
+                    if( $(window).scrollTop() > stickyHeaderTop ) {
+                            $('#stickytypeheader').css({position: 'fixed', top: '0px'});
+                            $('#sticky').css('display', 'block');
+                    } else {
+                            $('#stickytypeheader').css({position: 'static', top: '0px'});
+                            $('#sticky').css('display', 'none');
+                    }
+            });
+        });
         const modal=document.getElementById('addGrpModal');
         function show_addGrpModal(){
             if(modal.classList.contains!='hidden')
@@ -264,6 +287,12 @@
                     
         	let user_id = localStorage.getItem('user_id');
         	const group_name = document.getElementById("grp_name").value;
+
+          if(group_name === ""){
+            document.querySelector(".modal_errMssg").innerHTML = "Group Name cannot be empty.";
+              showErrModal();
+              return;
+          }
           
         	let mails = [];
         	console.log(index);
@@ -431,7 +460,7 @@
               res = response.data;
               res = res["mapping"]
 
-              console.log("res"+res.length)
+              console.log("res"+res)
               for(i=0;i<res.length;i++)
               {
                 addgrps(res[i]["group_id"],res[i]["group_name"],res[i]["spent"]-res[i]["paid"])
