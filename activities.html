@@ -52,7 +52,7 @@
     }
 
     .addGrpModal {
-      position: absolute;
+      position: fixed;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
@@ -133,6 +133,10 @@
       border: none;
       background: none;
     }
+    #container_header{
+      z-index: 1;
+      background-color: #36454f;
+    }
 
     #expenses_list{
       position:relative;
@@ -150,6 +154,12 @@
       height:70px;
       padding:10px;
     }
+    #sticky {
+      display: none;
+      height: 10px;
+    }
+
+    
 
 </style>
 <body>
@@ -196,9 +206,9 @@
     </div>
 
     <div class="container">
-      <div class="heading">
+      <div class="heading" id="container_header">
           <nav class="navbar navbar-expand-lg navbar-light">  
-            <h3 class="navbar-brand" style="color: white;">GRP NAME</h3>
+            <h3 class="navbar-brand" id ="group_name" style="color: white; font-size: 25px;">GRP NAME</h3>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -212,10 +222,11 @@
                 </div>
             </div>
           </nav>
-          <button type="button" class="btn btn-primary" onclick="show_addExpModal()">
+          <button type="button" class="btn btn-primary" id="Add_exp_btn" onclick="show_addExpModal()">
             + ADD EXPENSE 
           </button>
     </div>
+    <div id="sticky"></div>
     <div id = "expenses_list">
     </div>
   </body>
@@ -225,8 +236,25 @@
     let expModal=document.getElementById("addExpModal");
 
     var member_names;
+
+    //jquey function to stickheader to top
+    $(function(){
+        var stickyHeaderTop = $('#container_header').offset().top;
+ 
+        $(window).scroll(function(){
+                if( $(window).scrollTop() > stickyHeaderTop ) {
+                        $('#stickytypeheader').css({position: 'fixed', top: '0px'});
+                        $('#sticky').css('display', 'block');
+                } else {
+                        $('#stickytypeheader').css({position: 'static', top: '0px'});
+                        $('#sticky').css('display', 'none');
+                }
+        });
+  });
     
     function show_addExpModal(){
+      var bt = document.getElementById("Add_exp_btn");
+      bt.disabled = true;
       for(let i = 0; i < member_names.length; i++){
         addMem(member_names[i],i+1);
       }
@@ -234,6 +262,8 @@
     }
 
     function close_addExpModal(){
+      var bt = document.getElementById("Add_exp_btn");
+      bt.disabled = false;
       document.querySelector('.membersList').innerHTML="";
       expModal.classList.add('hidden');
     }
@@ -342,6 +372,11 @@
           paid = 0;
           flag++;
         }
+        if(Number(spent)<0 || Number(paid)<0){
+          document.querySelector(".modal_errMssg").innerHTML = "Spent/Paid cannot have negative values.";
+          showErrModal();
+          return;
+        }
         s+=Number(spent);
         p+=Number(paid);
         json = {"email": email,	"pay": Number(paid) ,"spent": Number(spent)}
@@ -366,9 +401,8 @@
       SEND_NEW_ACTIVITY(js);
       close_addExpModal();
     }
+
     
-
-
         function SEND_FOR_POST()
         {
           let user_id = localStorage.getItem('user_id');
@@ -383,9 +417,12 @@
             {
               console.log(response.data);
               res = response.data;
+              var g_name = document.getElementById("group_name");
+              g_name.innerHTML = res["group_name"];
               res = res["mapping"]
               console.log("res",res)
               console.log("res"+res.length)
+
               for(i=0;i<res.length;i++)
               {
                 addExpenses(res[i])
