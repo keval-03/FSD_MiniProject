@@ -416,11 +416,11 @@
           if(amount < 0) {
             font_colour = "#FF0000";
             amount = -1*amount;
-            owe_text = "You owe"+amount+".";
+            owe_text = "You owe "+amount+".";
           }
           else if (amount > 0){
             font_colour = "#00FF00";
-            owe_text = "You are owed"+amount+".";
+            owe_text = "You are owed "+amount+".";
           }
           else {
             font_colour = "#36454F";
@@ -463,7 +463,7 @@
               console.log("res"+res)
               for(i=0;i<res.length;i++)
               {
-                addgrps(res[i]["group_id"],res[i]["group_name"],res[i]["spent"]-res[i]["paid"])
+                addgrps(res[i]["group_id"],res[i]["group_name"],res[i]["paid"]-res[i]["spent"])
               }
 
             })
