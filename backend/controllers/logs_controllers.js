@@ -13,7 +13,7 @@ const logs_post = async (req,res)=>
         let result = await get_logs(user_id,group_id)
 
         let js = {"mapping":result};
-        //console.log(js)
+        console.log(js)
         res.json(js)
     }
 
@@ -48,7 +48,7 @@ async function get_logs(user_id,group_id)
     let ans = []
     for(i=0;i<res.length;i++)
     {
-        if(res[i]["for_id"]===null || res[i]["for_id"]==user_id || res[i]["by_id"]==4)
+        if(res[i]["for_id"]==null || res[i]["for_id"]==user_id || res[i]["by_id"]==user_id)
         {
             delete res[i].for_id;
             delete res[i].by_id;
@@ -114,7 +114,7 @@ async function update_expense( group_id , json )
     let query = `UPDATE ${table_name} SET paid = paid - ${json["amount"]} WHERE user_id=${json["give_id"]}`
     let result = await connection.execute(query)
 
-    query = `UPDATE ${table_name} SET paid = paid - ${json["amount"]} WHERE user_id=${json["take_id"]}`
+    query = `UPDATE ${table_name} SET paid = paid + ${json["amount"]} WHERE user_id=${json["take_id"]}`
     result = await connection.execute(query)
 }
 

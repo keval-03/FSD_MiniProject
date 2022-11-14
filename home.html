@@ -243,6 +243,7 @@
         function closeErrModal() {
           document.querySelector(".errModal").style.display = "none";
           document.querySelector(".overlay").style.display = "none";
+          document.location.reload();
         }
         function showErrModal() {
           document.querySelector(".errModal").style.display = "block";
@@ -294,6 +295,11 @@
               return;
           }
           
+          if(index == 0){
+            document.querySelector(".modal_errMssg").innerHTML = "You need to addd members to create a group.";
+              showErrModal();
+              return;
+          }
         	let mails = [];
         	console.log(index);
           
@@ -318,6 +324,7 @@
               showErrModal();
               return;
             }
+            
           	console.log(mails);
             for(i = 0; i < ind-1; i++){
               for(j = i+1; j <= ind-1; j++){
@@ -347,8 +354,8 @@
 				}
 				else
 				{
-					error = response.data.msg
-					id_list = response.data.id_list
+					error = response.data.msg;
+          id_list = response.data.id_list;
           document.querySelector(".modal_errMssg").innerHTML = error;
           showErrModal();
 				}

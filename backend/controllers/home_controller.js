@@ -88,8 +88,9 @@ const home_post = async (req, res) => {
     //console.log(ids_array)
     if (present == false)
     {
-      res.json({ msg: "Wrong emails provided!!!", id_list: ids_array });
+      res.json({msg:"Wrong emails provided!!!", id_list:ids_array});
       return;
+      
     }
 
     // when all the emails are right then give group entry in MAIN_groups table
