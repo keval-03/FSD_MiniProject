@@ -2,7 +2,8 @@ use splitbill;
 show tables;
 
 
-CREATE TABLE MAIN_users( user_id INTEGER PRIMARY KEY AUTO_INCREMENT , user_email VARCHAR(255) UNIQUE, user_password VARCHAR(2048) );
+CREATE TABLE MAIN_users( user_id INTEGER PRIMARY KEY AUTO_INCREMENT , user_email VARCHAR(255) UNIQUE, user_password VARCHAR(2048),verified TINYINT);
+
 
 INSERT INTO MAIN_users (user_email,user_password)
 VALUES
