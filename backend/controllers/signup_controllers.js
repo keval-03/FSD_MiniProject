@@ -39,7 +39,7 @@ const signup_post = async (req, res) => {
 
 
 function prepare_url(email, password) {
-  let url = `localhost:3005/api/v1/verify/"${email}"&"${password}"`
+  let url = `http://localhost:3005/api/v1/verify/"${email}"&"${password}"`;
   console.log(url)
   return url;
 }
@@ -65,8 +65,12 @@ function SendMail(email, url) {
       html: `
       <p>Press the link below OR pastle the link in URL only if you have signed up for Expense Manager</p><br>
       <p>${url}</p>
-      <a href="${url}">LINK</a>
-      </p> Thanks </p>
+      <p>
+      <a href='${url}'>LINK</a>
+      </p> 
+      <p>
+      Thanks 
+      </p>
       `
   };
 
