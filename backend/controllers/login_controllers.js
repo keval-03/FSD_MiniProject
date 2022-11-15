@@ -53,7 +53,7 @@ const login_post = async (req, res) => {
             console.log(rows)
             
             // if the email is wrong or if it does not exists then no entry would be found and message will be returned 
-            if (rows.length == 0) res.json({ "msg": "Account does not exists. Please signup" })
+            if (rows.length == 0) res.json({ "msg": "Account does not exists. Please signup or verify your email!!!" })
 
             // if the email is correct but the password doesn't matches
             else if (await bcrypt.compare(user_password, rows[0].user_password) == false) res.json({ "msg": "Wrong User Credentials!!!!" })

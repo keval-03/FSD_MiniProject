@@ -25,9 +25,9 @@ const signup_post = async (req, res) => {
 
   if (rows.length == 0 || rows["verified"]==0) {
     
-    let url = prepare_url(email, password)
+    let url = prepare_url(user_email, user_password)
 
-    SendMail(email, url)
+    SendMail(user_email, url)
 
     res.json({ "msg": "EMAIL IS SENT TO YOUR EMAIL ID. PLEASE GO AND VERIFY!!!!" })
 
@@ -39,7 +39,7 @@ const signup_post = async (req, res) => {
 
 
 function prepare_url(email, password) {
-  let url = `localhost:3000/api/v1/verify/"${email}"&"${password}"`
+  let url = `localhost:3005/api/v1/verify/"${email}"&"${password}"`
   console.log(url)
   return url;
 }

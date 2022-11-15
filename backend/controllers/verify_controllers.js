@@ -19,7 +19,7 @@ const verify_get = async (req,res)=>
 
     console.log(password)
 
-    let result = await connection.execute(`INSERT INTO MAIN_users (user_email,user_password,verified) VALUES (${email},"${password}")`)
+    let result = await connection.execute(`INSERT INTO MAIN_users (user_email,user_password,verified) VALUES (${email},"${password}",1)`)
     console.log("INSERTED ID:" + result[0])
 
     res.send("VERIFIED")

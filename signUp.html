@@ -131,16 +131,21 @@
     }
   </style>
   <body>
-    <div class="errModal">
+    <div class="errModal" id = "errModal">
       <button class="close-errModal">&times;</button>
-
       <p>
-
         <img class="err_gif" src="/images/55-error-solid.gif" alt="">
-
         <span class="modal_errMssg"></span>
       </p>
     </div>
+
+    <div class="errModal" id = "Vermodal">
+      <button class="close-vermodal" onclick="closeVerModal()">&times;</button>
+      <p>
+        Verification email sent. Please Verify Your mail.
+      </p>
+    </div>
+
     <div class="overlay"></div>
     <div class="login_panel" name="signUpPanel">
       <div style="text-align: center"><h2>Sign Up</h2></div>
@@ -168,11 +173,22 @@
 
     <script>
       function closeErrModal() {
-        document.querySelector(".errModal").style.display = "none";
+        document.querySelector("#errModal").style.display = "none";
         document.querySelector(".overlay").style.display = "none";
       }
       function showErrModal() {
-        document.querySelector(".errModal").style.display = "block";
+        document.querySelector("#errModal").style.display = "block";
+        document.querySelector(".overlay").style.display = "block";
+      }
+      function closeVerModal() {
+        console.log("here");
+        document.querySelector("#Vermodal").style.display = "none";
+        document.querySelector(".overlay").style.display = "none";
+				window.location.href = "http://127.0.0.1:5500/login.html";
+      }
+      function showVerModal() {
+        console.log("here");
+        document.querySelector("#Vermodal").style.display = "block";
         document.querySelector(".overlay").style.display = "block";
       }
       function validate() {
@@ -235,9 +251,7 @@
 				}
 		    else
 			  {
-					localStorage.setItem('user_id',res.user_id);
-          url = 'http://127.0.0.1:5500/home.html';
-					location.href = url
+          showVerModal();
 				}
           	})
           	.catch(function (error) {
