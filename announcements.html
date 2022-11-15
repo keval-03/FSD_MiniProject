@@ -4,7 +4,8 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Announcements</title>
+    <link rel="icon" type="image/x-icon" href="/images/logo_icon.ico" />
+    <title>Announcement</title>
 
     <!-- CSS only -->
     <link
@@ -165,24 +166,25 @@
     .inputCont {
       position: fixed;
       bottom: 0;
-      width: 78%;
+      width: 70%;
       height: fit-content;
       padding: 10px;
-      margin: 50px;
+      left: 50%;
+      transform: translate(-50%,0);
       margin-bottom: 20px;
-      background-color: lightgray;
+      background-color: white;
       border:#36454f solid;
-      border-radius: 1.5rem;
+      border-radius: 1.2rem;
     }
 
     .mssg_input {
-      width: 50%;
       border: none;
       border-bottom: #36454f solid thin;
-      width: 92%;
+      width: 90%;
+      margin-left: 10px;
       font-size: 1.2rem;
-      border-radius: 10px;
-      background-color: lightgray;
+      /* border-radius: 10px; */
+      background-color: white;
     }
   </style>
   <body>
@@ -214,7 +216,7 @@
     </div>
 
     <div class="inputCont">
-        <span><input class="mssg_input" type="text" placeholder="Enter the message"/></span>
+        <span><input class="mssg_input" type="text" placeholder="  Enter the message"/></span>
         <span><button class="btn btn-primary" onclick="submit_mssg()">SUBMIT</button></span>
       </div>
   </body>
@@ -283,6 +285,7 @@
 
         function submit_mssg(){
           let mssg_val=document.querySelector('.mssg_input').value;
+          if(mssg_val === "") return;
           let user_id = localStorage.getItem('user_id');
           let group_id = localStorage.getItem('group_id');
 
@@ -292,7 +295,6 @@
           SEND_NEW_ACTIVITY(js);
         }
 
-         
 
         function SEND_FOR_POST()
         {

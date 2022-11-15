@@ -62,36 +62,47 @@ const home_post = async (req, res) => {
     //console.log(member_mails)
 
     // first find the user_ids by email and if the email is wrong then dont make the group
-    ids_array = [];
-    present = true;
+    let ids_array = [];
+    let present = true;
 
-    for (i = 0; i < member_mails.length; i++) {
-      const [rows, cols] = await connection.query("CALL get_user_id(?)", [
-        member_mails[i],
-      ]);
+    console.log(member_mails)
+    for (i = 0; i < member_mails.length; i++) 
+    {
+      let query = `SELECT user_id from MAIN_users WHERE user_email = '${member_mails[i]}'`
+      console.log(query)
+      let result = await connection.execute(query)
+      console.log("RESULT-->",result)
+      result = result[0][0]
+      
 
-      //console.log(rows[0][0])
-      if (rows[0][0] === undefined) {
+      if (result == undefined) {
         ids_array.push(-1);
-        //console.log("Undefined")
+        console.log("Undefined")
         present = false;
-      } else {
-        ids_array.push(rows[0][0]["user_id"]);
-        //console.log(rows[0][0]["user_id"])
+      } 
+      else 
+      {
+        ids_array.push(result["user_id"]);
       }
     }
     //console.log(ids_array)
-    if (present === false)
-      res.json({ msg: "Wrong emails provided!!!", id_list: ids_array });
+    if (present == false)
+    {
+      res.json({msg:"Wrong emails provided!!!", id_list:ids_array});
+      return;
+      
+    }
 
     // when all the emails are right then give group entry in MAIN_groups table
-    let [rows, cols] = await connection.execute(
+    let [rows,cols] = await connection.execute(
       "INSERT INTO MAIN_groups (group_name) VALUES (?)",
       [group_name]
     );
     //console.log("ID OF GROUP INSERTED IS: ", rows["insertId"])
     right_json["group_id"] = rows["insertId"];
-
+    //console.log(right_json["group_id"])
+    //console.log(ids_array)
+    
     flag = false
     // then do the mapping of user_id and group_id in MAIN_users__groups table
     for (i = 0; i < ids_array.length; i++) {
