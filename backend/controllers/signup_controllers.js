@@ -1,7 +1,5 @@
 const connection = require("../db/connection.js").connection;
-const express = require("express");
-const mysql = require("mysql2");
-const bcrypt = require("bcrypt");
+const nodemailer = require('nodemailer')
 
 /*
 
@@ -25,21 +23,63 @@ const signup_post = async (req, res) => {
   );
   console.log(rows);
 
-  if (rows.length == 0) {
-    const salt = await bcrypt.genSalt();
-    user_password = await bcrypt.hash(user_password, salt);
-    //console.log(user_password)
+  if (rows.length == 0 || rows["verified"]==0) {
+    
+    let url = prepare_url(email, password)
 
-    const [rows, cols] = await connection.query(
-      "INSERT INTO MAIN_users (user_email,user_password) VALUES (?,?)",
-      [user_email, user_password]
-    );
-    //console.log(rows)
-    //console.log(rows.insertId)
-    res.json({ user_id: rows.insertId });
-  } else {
-    res.json({ msg: "Account already exists!!!" });
+    SendMail(email, url)
+
+    res.json({ "msg": "EMAIL IS SENT TO YOUR EMAIL ID. PLEASE GO AND VERIFY!!!!" })
+
+  } 
+  else {
+    return res.json({ msg: "Account already exists!!!" });
   }
 };
+
+
+function prepare_url(email, password) {
+  let url = `localhost:3000/api/v1/verify/"${email}"&"${password}"`
+  console.log(url)
+  return url;
+}
+
+
+function SendMail(email, url) {
+  var Transport = nodemailer.createTransport({
+
+      service: "Gmail",
+      auth:
+      {
+          user: process.env.MAIL_ID,
+          pass: process.env.MAIL_PASSWORD
+      }
+
+  });
+
+
+  var mailOptions = {
+      from: "Expense Manager",
+      to: email,
+      subject: "USER AUTHENTICATION FOR EXPENSE MANAGER",
+      html: `
+      <p>Press the link below OR pastle the link in URL only if you have signed up for Expense Manager</p><br>
+      <p>${url}</p>
+      <a href=${url}>LINK</a>
+      </p> Thanks </p>
+      `
+  };
+
+  Transport.sendMail(mailOptions, function (error, response) {
+      if (error) console.log(error);
+      else console.log("Message Sent")
+  });
+
+
+}
+
+
+
+
 
 module.exports = { signup_post };

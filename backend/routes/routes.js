@@ -11,6 +11,7 @@ const { status_post } = require('../controllers/status_controller.js');
 const { expense_post } = require('../controllers/expense_controller.js');
 const {settle_post} = require('../controllers/settle_controller');
 const { logs_post } = require('../controllers/logs_controllers.js');
+const { verify_get } = require('../controllers/verify_controllers.js');
 
 
 router.route('/login').post(login_post)
@@ -22,6 +23,6 @@ router.route('/status').post(status_post)
 router.route('/expense').post(expense_post)
 router.route('/settle').post(settle_post)
 router.route('/logs').post(logs_post)
-
+router.route('/verify/:email&:password').get(verify_get)
 
 module.exports = { router }

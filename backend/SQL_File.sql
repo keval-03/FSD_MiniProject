@@ -94,3 +94,4 @@ DELIMITER ;
 SELECT NOW();
 INSERT INTO activities_62 (activity_name,activity_time,1_pay,1_spent,2_pay,2_spent) VALUES ( "ABC" , '2022-11-11 17:07:54' , 100 , 100 , 100 , 100 );
 INSERT INTO activities_62 (activity_name,activity_time,1_pay,1_spent,2_pay,2_spent) VALUES ( "BCD" , '2022-11-11 17:07:54' , 200 , 200 , 200 , 200 );
+

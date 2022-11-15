@@ -94,12 +94,11 @@ const home_post = async (req, res) => {
 
     flag = false
     // then do the mapping of user_id and group_id in MAIN_users__groups table
-    for (i = 0; i < ids_array.length; i++) 
-    {
-      if(ids_array[i] == user_id) flag=true;
-      [rows, cols] = await connection.execute("CALL insert_user_id_group_id(?,?)",[ids_array[i], right_json["group_id"]]);
+    for (i = 0; i < ids_array.length; i++) {
+      if (ids_array[i] == user_id) flag = true;
+      [rows, cols] = await connection.execute("CALL insert_user_id_group_id(?,?)", [ids_array[i], right_json["group_id"]]);
     }
-    if(flag==false)   ids_array.push(user_id);
+    if (flag == false) ids_array.push(user_id);
 
     // members_[group_id] table --> user_id , spent , paid
     //console.log("members_"+String(right_json["group_id"]))
@@ -120,10 +119,11 @@ const home_post = async (req, res) => {
 
     // buttons_[group_id] table --> by_id , for_id , amount , state
     table_name = "buttons_" + String(right_json["group_id"]);
+    let table_name_2 = "members_" + String(right_json["group_id"]);
     query =
       "CREATE TABLE " +
       table_name +
-      " (btn_id INTEGER PRIMARY KEY AUTO_INCREMENT,take_id INTEGER, give_id INTEGER, amount INTEGER, FOREIGN KEY (take_id) REFERENCES MAIN_users(user_id), FOREIGN KEY (give_id) REFERENCES MAIN_users(user_id) )";
+      " (btn_id INTEGER PRIMARY KEY AUTO_INCREMENT,take_id INTEGER, give_id INTEGER, amount INTEGER, FOREIGN KEY (take_id) REFERENCES " + table_name_2 + "(user_id), FOREIGN KEY (give_id) REFERENCES " + table_name_2 + "(user_id) )";
     //console.log(query)
     result = await connection.execute(query);
     // cosnole.log(rows)
@@ -154,7 +154,6 @@ const home_post = async (req, res) => {
     console.log("announcements_" + String(right_json["group_id"]));
     // announcements_[group_id] table --> by_id , announcement , dtime
     table_name = "announcements_" + String(right_json["group_id"]);
-    table_name_2 = "members_" + String(right_json["group_id"]);
     table_name_3 = "buttons_" + String(right_json["group_id"]);
 
     query =
