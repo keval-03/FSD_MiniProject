@@ -65,7 +65,7 @@ function SendMail(email, url) {
       html: `
       <p>Press the link below OR pastle the link in URL only if you have signed up for Expense Manager</p><br>
       <p>${url}</p>
-      <a href=${url}>LINK</a>
+      <a href="${url}">LINK</a>
       </p> Thanks </p>
       `
   };

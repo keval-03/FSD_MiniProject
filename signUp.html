@@ -243,15 +243,14 @@
           .then(function (response) {
             	console.log(response.data);
 				res = response.data
-				if(res.msg!=undefined)
+        if(res.msg==="EMAIL IS SENT TO YOUR EMAIL ID. PLEASE GO AND VERIFY!!!!"){
+          showVerModal();
+        }
+				else
 				{
 					console.log(res.msg);
 					document.querySelector(".modal_errMssg").innerHTML=res.msg;
 					showErrModal();
-				}
-		    else
-			  {
-          showVerModal();
 				}
           	})
           	.catch(function (error) {
