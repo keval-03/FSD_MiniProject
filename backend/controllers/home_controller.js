@@ -66,35 +66,32 @@ const home_post = async (req, res) => {
     let present = true;
 
     console.log(member_mails)
-    for (i = 0; i < member_mails.length; i++) 
-    {
+    for (i = 0; i < member_mails.length; i++) {
       let query = `SELECT user_id from MAIN_users WHERE user_email = '${member_mails[i]}'`
       console.log(query)
       let result = await connection.execute(query)
-      console.log("RESULT-->",result)
+      console.log("RESULT-->", result)
       result = result[0][0]
-      
+
 
       if (result == undefined) {
         ids_array.push(-1);
         console.log("Undefined")
         present = false;
-      } 
-      else 
-      {
+      }
+      else {
         ids_array.push(result["user_id"]);
       }
     }
     //console.log(ids_array)
-    if (present == false)
-    {
-      res.json({msg:"Wrong emails provided!!!", id_list:ids_array});
+    if (present == false) {
+      res.json({ msg: "Wrong emails provided!!!", id_list: ids_array });
       return;
-      
+
     }
 
     // when all the emails are right then give group entry in MAIN_groups table
-    let [rows,cols] = await connection.execute(
+    let [rows, cols] = await connection.execute(
       "INSERT INTO MAIN_groups (group_name) VALUES (?)",
       [group_name]
     );
@@ -102,15 +99,17 @@ const home_post = async (req, res) => {
     right_json["group_id"] = rows["insertId"];
     //console.log(right_json["group_id"])
     //console.log(ids_array)
-    
+
     flag = false
     // then do the mapping of user_id and group_id in MAIN_users__groups table
     for (i = 0; i < ids_array.length; i++) {
       if (ids_array[i] == user_id) flag = true;
-      [rows, cols] = await connection.execute("CALL insert_user_id_group_id(?,?)", [ids_array[i], right_json["group_id"]]);
+      let [rows, cols] = await connection.execute("CALL insert_user_id_group_id(?,?)", [ids_array[i], right_json["group_id"]]);
     }
-    if (flag == false) ids_array.push(user_id);
-
+    if (flag == false) {
+      ids_array.push(user_id);
+      let [rows, cols] = await connection.execute("CALL insert_user_id_group_id(?,?)", [user_id, right_json["group_id"]]);
+    }
     // members_[group_id] table --> user_id , spent , paid
     //console.log("members_"+String(right_json["group_id"]))
     let table_name = "members_" + String(right_json["group_id"]);
