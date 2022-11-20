@@ -22,6 +22,7 @@
       integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
       crossorigin="anonymous"
     ></script>
+    <script data-cfasync="false" type="text/javascript" src="config.js"></script>
   </head>
   <style>
     @import url("https://fonts.googleapis.com/css2?family=Vollkorn:wght@600&display=swap");
@@ -200,6 +201,7 @@
       });
 
       function collect_post() {
+        console.log('here')
         let flag = validate();
         if (flag) {
           user_email = document.querySelector("input[name=email]").value;
@@ -218,7 +220,7 @@
                 showErrModal();
               } else {
                 localStorage.setItem("user_id", res.user_id);
-                location.href = "http://127.0.0.1:5500/home.html";
+                location.href = server_path + "/home.html";
               }
             })
             .catch(function (error) {

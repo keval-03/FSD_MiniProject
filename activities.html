@@ -22,6 +22,7 @@
       integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
       crossorigin="anonymous"
     ></script>
+    <script data-cfasync="false" type="text/javascript" src="config.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
@@ -335,7 +336,7 @@
       localStorage.removeItem("activity_id");
       localStorage.setItem("activity_id",id)
       localStorage.setItem("activity_name",name);
-      window.location.href = "http://127.0.0.1:5500/expense.html";
+      window.location.href = server_path + "/expense.html";
     }
 
     function SEND_NEW_ACTIVITY(js){
