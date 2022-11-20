@@ -22,6 +22,7 @@
       integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
       crossorigin="anonymous"
     ></script>
+    <script data-cfasync="false" type="text/javascript" src="config.js"></script>
   </head>
   <style>
     @import url("https://fonts.googleapis.com/css2?family=Vollkorn:wght@600&display=swap");
@@ -184,7 +185,7 @@
         console.log("here");
         document.querySelector("#Vermodal").style.display = "none";
         document.querySelector(".overlay").style.display = "none";
-				window.location.href = "http://127.0.0.1:5500/login.html";
+				window.location.href = server_path + "/login.html";
       }
       function showVerModal() {
         console.log("here");

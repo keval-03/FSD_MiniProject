@@ -22,6 +22,7 @@
       integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
       crossorigin="anonymous"
     ></script>
+    <script data-cfasync="false" type="text/javascript" src="config.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   </head>
@@ -449,7 +450,7 @@
         // To navigate to groups.html when clicked on a group
         function groups_on_click(id){
           localStorage.setItem("group_id",id);
-          window.location.href = "http://127.0.0.1:5500/activities.html";
+          window.location.href = server_path + "/activities.html";
         };
 
         function SEND_FOR_POST()

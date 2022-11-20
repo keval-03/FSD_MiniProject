@@ -64,7 +64,6 @@ function SendMail(email, url) {
       subject: "USER AUTHENTICATION FOR EXPENSE MANAGER",
       html: `
       <p>Press the link below OR pastle the link in URL only if you have signed up for Expense Manager</p><br>
-      <p>${url}</p>
       <p>
       <a href='${url}'>LINK</a>
       </p> 

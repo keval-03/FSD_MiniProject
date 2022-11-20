@@ -1,6 +1,6 @@
 const connection = require('../db/connection').connection
 const bcrypt = require('bcrypt')
-
+const server_path = require('../../config.js')
 
 const verify_get = async (req,res)=>
 {
@@ -22,7 +22,7 @@ const verify_get = async (req,res)=>
     let result = await connection.execute(`INSERT INTO MAIN_users (user_email,user_password,verified) VALUES (${email},"${password}",1)`)
     console.log("INSERTED ID:" + result[0])
 
-    res.redirect("http://127.0.0.1:5500/login.html");
+    res.redirect(server_path + "/login.html");
 
 }
 
